@@ -1,0 +1,642 @@
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { features } from '../data/features'
+
+// ── Panel specs: what the dashboard mock shows at each scroll step ──────────
+type PanelSpec =
+  | { kind: 'map' }
+  | { kind: 'sort' }
+  | { kind: 'bars' }
+  | { kind: 'stats'; items: { value: string; label: string }[] }
+  | { kind: 'table'; rows: { main: string; sub: string; badge: string; tone: Tone }[] }
+  | { kind: 'bubbles'; items: { title: string; sub: string; accent?: boolean }[] }
+  | { kind: 'timeline'; done: number; labels: string[] }
+  | { kind: 'roster'; rows: { name: string; role: string; pct: number }[] }
+
+type Tone = 'blue' | 'green' | 'amber' | 'rose'
+
+const TONE: Record<Tone, string> = {
+  blue: 'bg-blue-50 text-blue-600',
+  green: 'bg-green-100 text-green-700',
+  amber: 'bg-amber-100 text-amber-700',
+  rose: 'bg-rose-100 text-rose-700',
+}
+
+type Step = { title: string; text: string; panel: PanelSpec }
+
+const STORIES: Record<string, Step[]> = {
+  'package-tracking': [
+    {
+      title: 'Every parcel on a live map',
+      text: 'The Tracking tab shows all active routes in real time. Watch each driver move across the city and spot problems before they reach the customer.',
+      panel: { kind: 'map' },
+    },
+    {
+      title: 'Live status for every package',
+      text: 'Each shipment updates the second it changes — picked up, at hub, out for delivery. No calls to drivers, no guessing.',
+      panel: {
+        kind: 'table',
+        rows: [
+          { main: 'PKG-3821', sub: 'New York → Boston', badge: 'In transit', tone: 'blue' },
+          { main: 'PKG-5504', sub: 'Chicago → Detroit', badge: 'Out for delivery', tone: 'green' },
+          { main: 'PKG-0193', sub: 'Austin → Dallas', badge: 'At hub', tone: 'amber' },
+        ],
+      },
+    },
+    {
+      title: 'Your numbers, always current',
+      text: 'The overview tiles update themselves as packages move, so your morning starts with real data instead of yesterday’s export.',
+      panel: {
+        kind: 'stats',
+        items: [
+          { value: '1,248', label: 'In transit' },
+          { value: '98.6%', label: 'On time' },
+          { value: '312', label: 'Delivered today' },
+        ],
+      },
+    },
+  ],
+  'mail-sorting': [
+    {
+      title: 'All incoming mail in one queue',
+      text: 'Every letter and parcel that enters the depot is scanned once and lands in a single queue on the dashboard.',
+      panel: {
+        kind: 'bubbles',
+        items: [
+          { title: 'Invoice #4421', sub: 'Sarah M. · Zone North', accent: true },
+          { title: 'Certified letter', sub: 'USPS · Zone Center' },
+          { title: 'Return request', sub: 'Tom Wren · Zone Docks' },
+        ],
+      },
+    },
+    {
+      title: 'Auto-routed to the right hub',
+      text: 'Sorting rules send each item down the right lane automatically — by zip, route, or service level. You watch every lane live.',
+      panel: { kind: 'sort' },
+    },
+    {
+      title: 'Nothing gets misplaced',
+      text: 'Misroutes show up on the board immediately, so they get fixed at the depot — not at an angry customer’s door.',
+      panel: {
+        kind: 'stats',
+        items: [
+          { value: '2,431', label: 'Sorted today' },
+          { value: '3', label: 'Hubs synced' },
+          { value: '0', label: 'Misplaced' },
+        ],
+      },
+    },
+  ],
+  'customer-notifications': [
+    {
+      title: 'Automatic SMS & email updates',
+      text: 'Write your message templates once. From then on, every status change sends the right message to the right customer — automatically.',
+      panel: {
+        kind: 'bubbles',
+        items: [
+          { title: 'Your package is out for delivery', sub: 'SMS · +1 555-0142', accent: true },
+          { title: 'Delivered — photo attached', sub: 'Email · anna@example.com' },
+          { title: 'Pickup scheduled for 9:00', sub: 'SMS · +1 555-0198' },
+        ],
+      },
+    },
+    {
+      title: 'Triggered by real delivery events',
+      text: 'Notifications fire exactly when the parcel moves — not on a timer. Customers see the same truth your dispatchers see.',
+      panel: { kind: 'timeline', done: 2, labels: ['Picked up', 'In transit', 'Delivered'] },
+    },
+    {
+      title: 'Fewer “where is my package?” calls',
+      text: 'When customers already know, they stop calling. Your team gets its day back.',
+      panel: {
+        kind: 'stats',
+        items: [
+          { value: '-62%', label: 'Support calls' },
+          { value: '4.9★', label: 'Delivery rating' },
+          { value: '100%', label: 'Customers informed' },
+        ],
+      },
+    },
+  ],
+  'staff-management': [
+    {
+      title: 'Your whole team in one view',
+      text: 'Drivers, sorters, and dispatchers — who’s on shift, what they’re carrying, and where they are right now.',
+      panel: {
+        kind: 'roster',
+        rows: [
+          { name: 'James R.', role: 'Van · #V-14', pct: 100 },
+          { name: 'Maria L.', role: 'Truck · #T-07', pct: 75 },
+          { name: 'Priya S.', role: 'Truck · #T-03', pct: 45 },
+        ],
+      },
+    },
+    {
+      title: 'Assign routes in seconds',
+      text: 'Drag a route onto a driver and they get it on their phone instantly — with stops, packages, and directions.',
+      panel: {
+        kind: 'table',
+        rows: [
+          { main: 'James R.', sub: 'Route 12 · North', badge: 'Assigned', tone: 'green' },
+          { main: 'Maria L.', sub: 'Route 4 · Docks', badge: 'Assigned', tone: 'green' },
+          { main: 'David K.', sub: 'Route 9 · Center', badge: 'Pending', tone: 'amber' },
+        ],
+      },
+    },
+    {
+      title: 'Shifts planned ahead',
+      text: 'Coverage gaps and double-bookings are flagged before they happen, not discovered at 6 AM.',
+      panel: {
+        kind: 'stats',
+        items: [
+          { value: '12', label: 'Drivers on shift' },
+          { value: '98%', label: 'Route coverage' },
+          { value: '0', label: 'Conflicts' },
+        ],
+      },
+    },
+  ],
+  'delivery-status': [
+    {
+      title: 'A live board of every delivery',
+      text: 'One board shows each delivery moving through its stages. Green means moving, and everything else gets your attention.',
+      panel: { kind: 'timeline', done: 3, labels: ['Picked up', 'In transit', 'Delivered'] },
+    },
+    {
+      title: 'Delays flagged before customers notice',
+      text: 'Exceptions and delays bubble to the top of the board automatically, so dispatch fixes them while there’s still time.',
+      panel: {
+        kind: 'table',
+        rows: [
+          { main: 'PKG-7741', sub: 'Seattle → Portland', badge: 'On time', tone: 'green' },
+          { main: 'PKG-2290', sub: 'Miami → Orlando', badge: 'Delayed 20m', tone: 'rose' },
+          { main: 'PKG-5504', sub: 'Chicago → Detroit', badge: 'Exception', tone: 'amber' },
+        ],
+      },
+    },
+    {
+      title: 'Proof of delivery, attached',
+      text: 'Signatures and photos are stored with each delivery, so disputes end with a link instead of a phone chain.',
+      panel: {
+        kind: 'stats',
+        items: [
+          { value: '312', label: 'Delivered today' },
+          { value: '307', label: 'Signatures' },
+          { value: '5', label: 'Photo proof' },
+        ],
+      },
+    },
+  ],
+  'reports-analytics': [
+    {
+      title: 'Your week at a glance',
+      text: 'Volume, on-time rate, and team performance — charted live on the Reports tab, no spreadsheet required.',
+      panel: { kind: 'bars' },
+    },
+    {
+      title: 'Spot trends before they cost you',
+      text: 'Week-over-week changes are computed for you. When a route slows down or costs creep up, you see it first.',
+      panel: {
+        kind: 'table',
+        rows: [
+          { main: 'On-time rate', sub: 'vs last week', badge: '+1.2%', tone: 'green' },
+          { main: 'Avg delivery time', sub: 'vs last week', badge: '-4 min', tone: 'green' },
+          { main: 'Cost per package', sub: 'vs last week', badge: '-$0.11', tone: 'green' },
+        ],
+      },
+    },
+    {
+      title: 'A digest in your inbox every Monday',
+      text: 'The numbers that matter, summarized and delivered — before your first coffee.',
+      panel: {
+        kind: 'bubbles',
+        items: [
+          { title: 'Weekly digest', sub: '8,240 packages delivered', accent: true },
+          { title: 'Top route', sub: 'North · 1,204 stops' },
+          { title: 'Needs attention', sub: '3 routes ran late twice' },
+        ],
+      },
+    },
+  ],
+}
+
+// ── Mock panels ──────────────────────────────────────────────────────────────
+function StatsPanel({ items }: { items: { value: string; label: string }[] }) {
+  return (
+    <div className="grid grid-cols-3 gap-3">
+      {items.map((item) => (
+        <div key={item.label} className="rounded-lg bg-blue-50 p-3 text-center">
+          <p className="text-lg font-bold text-blue-600">{item.value}</p>
+          <p className="text-[11px] text-gray-500">{item.label}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function TablePanel({ rows }: { rows: { main: string; sub: string; badge: string; tone: Tone }[] }) {
+  return (
+    <div className="flex flex-col gap-2">
+      {rows.map((row) => (
+        <div key={row.main + row.sub} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2.5">
+          <div>
+            <p className="text-xs font-semibold text-gray-800">{row.main}</p>
+            <p className="text-[11px] text-gray-400">{row.sub}</p>
+          </div>
+          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${TONE[row.tone]}`}>{row.badge}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function BubblesPanel({ items }: { items: { title: string; sub: string; accent?: boolean }[] }) {
+  return (
+    <div className="flex flex-col gap-2">
+      {items.map((item) => (
+        <div
+          key={item.title}
+          className={`rounded-xl px-3 py-2.5 ${item.accent ? 'bg-blue-600 text-white' : 'border border-gray-100 bg-white shadow-sm'}`}
+        >
+          <p className={`text-xs font-semibold ${item.accent ? 'text-white' : 'text-gray-800'}`}>{item.title}</p>
+          <p className={`text-[11px] ${item.accent ? 'text-blue-100' : 'text-gray-400'}`}>{item.sub}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function TimelinePanel({ done, labels }: { done: number; labels: string[] }) {
+  return (
+    <div className="px-2 py-6">
+      <div className="relative flex items-center justify-between">
+        <div className="absolute inset-x-2 top-1/2 h-1 -translate-y-1/2 rounded bg-gray-200" />
+        <div
+          className="absolute top-1/2 left-2 h-1 -translate-y-1/2 rounded bg-blue-600 transition-all duration-700"
+          style={{ width: `${(Math.max(done - 1, 0) / (labels.length - 1)) * 100}%` }}
+        />
+        {labels.map((label, i) => (
+          <div key={label} className="relative flex flex-col items-center gap-2">
+            <span
+              className={`flex h-7 w-7 items-center justify-center rounded-full border-2 text-white ${
+                i < done ? 'border-blue-600 bg-blue-600' : 'border-gray-300 bg-white'
+              }`}
+            >
+              {i < done && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="h-3.5 w-3.5">
+                  <path d="m5 13 4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </span>
+            <span className="absolute top-9 text-[10px] whitespace-nowrap text-gray-500">{label}</span>
+          </div>
+        ))}
+      </div>
+      <div className="h-6" />
+    </div>
+  )
+}
+
+function RosterPanel({ rows }: { rows: { name: string; role: string; pct: number }[] }) {
+  return (
+    <div className="flex flex-col gap-2">
+      {rows.map((row) => (
+        <div key={row.name} className="flex items-center gap-3 rounded-lg bg-gray-50 px-3 py-2.5">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[10px] font-bold text-blue-600">
+            {row.name.split(' ').map((w) => w[0]).join('')}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold text-gray-800">{row.name}</p>
+            <p className="text-[11px] text-gray-400">{row.role}</p>
+          </div>
+          <div className="h-1.5 w-20 overflow-hidden rounded-full bg-gray-200">
+            <div className="h-full rounded-full bg-blue-600" style={{ width: `${row.pct}%` }} />
+          </div>
+          <span className="w-9 text-right text-[10px] font-semibold text-gray-500">{row.pct}%</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function MapPanel() {
+  return (
+    <svg viewBox="0 0 400 220" className="h-52 w-full rounded-xl border border-blue-50 bg-linear-to-br from-blue-50 to-slate-100" aria-hidden="true">
+      <rect x="185" y="115" width="60" height="42" rx="8" fill="#d1fae5" />
+      <rect x="80" y="48" width="66" height="40" rx="8" fill="#e2e8f0" opacity="0.6" />
+      <g stroke="#ffffff" strokeWidth="10" strokeLinecap="round">
+        <path d="M-10 38 H410" />
+        <path d="M-10 104 H410" />
+        <path d="M-10 170 H410" />
+        <path d="M70 -10 V230" />
+        <path d="M165 -10 V230" />
+        <path d="M262 -10 V230" />
+        <path d="M348 -10 V230" />
+      </g>
+      <path d="M30 170 H165 V104 H262 V38 H348" fill="none" stroke="#2563eb" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 9" />
+      <circle cx="30" cy="170" r="6" fill="#ffffff" stroke="#2563eb" strokeWidth="3" />
+      <path d="M348 20c-7 0-12 5-12 11.5C336 40 348 50 348 50s12-10 12-18.5C360 25 355 20 348 20Z" fill="#2563eb" />
+      <circle cx="348" cy="32" r="4" fill="#ffffff" />
+      <g>
+        <circle r="5.5" fill="#2563eb" stroke="#ffffff" strokeWidth="2.5" />
+        <animateMotion dur="8s" repeatCount="indefinite" path="M30 170 H165 V104 H262 V38 H348" />
+      </g>
+    </svg>
+  )
+}
+
+function SortPanel() {
+  const lanes = [
+    'M14 55 H58 C82 55 84 22 108 22 H188',
+    'M14 55 H188',
+    'M14 55 H58 C82 55 84 88 108 88 H188',
+  ]
+  return (
+    <svg viewBox="0 0 220 110" className="h-52 w-full rounded-xl border border-blue-50 bg-linear-to-br from-blue-50 to-slate-100" aria-hidden="true">
+      <g fill="none" stroke="#cbd5e1" strokeWidth="2" strokeLinecap="round" strokeDasharray="1 7">
+        {lanes.map((d) => (
+          <path key={d} d={d} />
+        ))}
+      </g>
+      <g fill="#dbeafe" stroke="#bfdbfe" strokeWidth="1.5">
+        <rect x="184" y="12" width="26" height="20" rx="5" />
+        <rect x="184" y="45" width="26" height="20" rx="5" />
+        <rect x="184" y="78" width="26" height="20" rx="5" />
+      </g>
+      {lanes.map((d, i) => (
+        <g key={d}>
+          <rect x="-6" y="-6" width="12" height="12" rx="2.5" fill="#2563eb" />
+          <path d="M0 -6 V6" stroke="#ffffff" strokeWidth="2" />
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="4.8s" begin={`${-i * 1.6}s`} repeatCount="indefinite" />
+          <animateMotion dur="4.8s" begin={`${-i * 1.6}s`} repeatCount="indefinite" path={d} />
+        </g>
+      ))}
+    </svg>
+  )
+}
+
+function BarsPanel() {
+  const bars = [
+    { x: 20, h: 28 },
+    { x: 60, h: 45 },
+    { x: 100, h: 38 },
+    { x: 140, h: 60 },
+    { x: 180, h: 50 },
+    { x: 220, h: 72, highlight: true },
+  ]
+  return (
+    <div className="relative">
+      <svg viewBox="0 0 280 110" className="h-52 w-full rounded-xl border border-blue-50 bg-linear-to-br from-blue-50 to-slate-100" aria-hidden="true">
+        <g stroke="#e2e8f0" strokeWidth="1">
+          <path d="M14 20 H266" />
+          <path d="M14 45 H266" />
+          <path d="M14 70 H266" />
+          <path d="M14 95 H266" />
+        </g>
+        {bars.map(({ x, h, highlight }) => (
+          <rect key={x} x={x} y={95 - h} width="26" height={h} rx="4" fill={highlight ? '#2563eb' : '#bfdbfe'} />
+        ))}
+      </svg>
+      <span className="absolute top-3 right-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-green-600 shadow-sm backdrop-blur">
+        +24% this week
+      </span>
+    </div>
+  )
+}
+
+function Panel({ spec }: { spec: PanelSpec }) {
+  switch (spec.kind) {
+    case 'map': return <MapPanel />
+    case 'sort': return <SortPanel />
+    case 'bars': return <BarsPanel />
+    case 'stats': return <StatsPanel items={spec.items} />
+    case 'table': return <TablePanel rows={spec.rows} />
+    case 'bubbles': return <BubblesPanel items={spec.items} />
+    case 'timeline': return <TimelinePanel done={spec.done} labels={spec.labels} />
+    case 'roster': return <RosterPanel rows={spec.rows} />
+  }
+}
+
+// ── Dashboard mock frame ─────────────────────────────────────────────────────
+const SIDEBAR = ['Overview', 'Tracking', 'Sorting', 'Notifications', 'Staff', 'Deliveries', 'Reports']
+
+const NAV: Record<string, string> = {
+  'package-tracking': 'Tracking',
+  'mail-sorting': 'Sorting',
+  'customer-notifications': 'Notifications',
+  'staff-management': 'Staff',
+  'delivery-status': 'Deliveries',
+  'reports-analytics': 'Reports',
+}
+
+function DashboardFrame({ active, children }: { active: string; children: ReactNode }) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl shadow-blue-50">
+      <div className="flex items-center gap-1.5 border-b border-gray-100 bg-gray-50 px-4 py-3">
+        <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
+        <span className="h-2.5 w-2.5 rounded-full bg-green-300" />
+        <span className="ml-3 text-xs font-medium text-gray-400">Nova Dashboard</span>
+      </div>
+      <div className="flex">
+        <div className="hidden w-36 shrink-0 flex-col gap-1 border-r border-gray-100 bg-gray-50/60 p-3 sm:flex">
+          {SIDEBAR.map((item) => (
+            <span
+              key={item}
+              className={`rounded-md px-2.5 py-1.5 text-[11px] font-medium ${
+                item === active ? 'bg-blue-600 text-white' : 'text-gray-500'
+              }`}
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+        <div className="min-h-64 flex-1 p-4">{children}</div>
+      </div>
+    </div>
+  )
+}
+
+// ── One feature's scroll story ───────────────────────────────────────────────
+type Feature = (typeof features)[number]
+
+function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step[]; index: number }) {
+  const [active, setActive] = useState(0)
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = []
+    stepRefs.current.forEach((el, i) => {
+      if (!el) return
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActive(i)
+        },
+        // a step becomes active when it crosses the middle of the viewport
+        { rootMargin: '-45% 0px -45% 0px' },
+      )
+      observer.observe(el)
+      observers.push(observer)
+    })
+    return () => observers.forEach((o) => o.disconnect())
+  }, [])
+
+  const nav = NAV[feature.slug] ?? 'Overview'
+
+  return (
+    <section id={feature.slug} className={`scroll-mt-20 ${index % 2 === 1 ? 'bg-gray-50' : 'bg-white'}`}>
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-200">
+            {feature.icon}
+          </span>
+          <h2 className="mt-5 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            {feature.title}
+          </h2>
+          <p className="mt-3 text-lg text-gray-600">{feature.description}</p>
+        </div>
+
+        <div className="lg:grid lg:grid-cols-2 lg:gap-16">
+          <div>
+            {steps.map((step, i) => (
+              <div
+                key={step.title}
+                ref={(el) => {
+                  stepRefs.current[i] = el
+                }}
+                className="flex flex-col justify-center py-12 lg:min-h-[60vh] lg:py-0"
+              >
+                <span
+                  className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold transition-colors duration-300 ${
+                    active === i ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600'
+                  }`}
+                >
+                  {i + 1}
+                </span>
+                <h3 className="mt-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{step.title}</h3>
+                <p className="mt-3 text-lg leading-8 text-gray-600">{step.text}</p>
+                {/* on small screens each step shows its own dashboard */}
+                <div className="mt-8 lg:hidden">
+                  <DashboardFrame active={nav}>
+                    <Panel spec={step.panel} />
+                  </DashboardFrame>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="hidden lg:block">
+            <div className="sticky top-24 py-12">
+              <DashboardFrame active={nav}>
+                <div key={active} className="animate-[feature-fade_0.45s_ease-out]">
+                  <Panel spec={steps[active].panel} />
+                </div>
+              </DashboardFrame>
+              <div className="mt-6 flex justify-center gap-2">
+                {steps.map((step, i) => (
+                  <span
+                    key={step.title}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      active === i ? 'w-6 bg-blue-600' : 'w-2 bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <a
+            href="/#cta"
+            className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-500 sm:w-auto"
+          >
+            Start free trial
+          </a>
+          <a
+            href="/pricing"
+            className="text-sm font-semibold text-blue-600 transition hover:text-blue-500"
+          >
+            See pricing →
+          </a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ── Page: all features, one scroll story after another ──────────────────────
+const FeaturesPage = () => {
+  return (
+    <div className="pt-16">
+      <section className="bg-linear-to-b from-blue-50 via-white to-white">
+        <div className="mx-auto max-w-3xl px-4 pt-16 pb-8 text-center sm:px-6 lg:px-8">
+          <span className="inline-block rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-600">
+            Features
+          </span>
+          <h1 className="mt-6 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
+            Everything your operation needs
+          </h1>
+          <p className="mt-4 text-lg text-gray-600">
+            Six features, one dashboard. Scroll to see each one exactly as your team will.
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
+              href="/#cta"
+              className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-500 sm:w-auto"
+            >
+              Start free trial
+            </a>
+            <a
+              href="/pricing"
+              className="w-full rounded-lg border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 sm:w-auto"
+            >
+              See pricing
+            </a>
+          </div>
+          <p className="mt-8 text-xs font-semibold tracking-widest text-gray-400 uppercase">
+            Scroll to explore ↓
+          </p>
+        </div>
+      </section>
+
+      {features.map((feature, index) => (
+        <FeatureStory
+          key={feature.slug}
+          feature={feature}
+          steps={
+            STORIES[feature.slug] ?? [
+              { title: feature.title, text: feature.detail, panel: { kind: 'map' } },
+            ]
+          }
+          index={index}
+        />
+      ))}
+
+      <section className="bg-gray-50">
+        <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+            All of it works together, out of the box
+          </h2>
+          <p className="mt-3 text-gray-600">
+            Every feature feeds the same dashboard — no integrations to glue together.
+          </p>
+          <div className="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
+              href="/#cta"
+              className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-500 sm:w-auto"
+            >
+              Start free trial
+            </a>
+            <a
+              href="/pricing"
+              className="w-full rounded-lg border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 sm:w-auto"
+            >
+              See pricing
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+export default FeaturesPage
