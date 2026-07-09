@@ -55,7 +55,7 @@ const FAQPage = () => {
       {/* Still stuck? Nudge to the CTA on the home page. */}
       <div className="mt-12 text-center">
         <a
-          href={localizedHref('/#cta', lang)}
+          href={localizedHref('/pricing', lang)}
           className="inline-flex items-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           {t.cta.secondary}

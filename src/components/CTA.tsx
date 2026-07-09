@@ -1,9 +1,10 @@
 import { useInView } from '../hooks/useInView'
 import { useLanguage } from '../context/LanguageContext'
+import { localizedHref } from '../i18n/routing'
 
 const CTA = () => {
   const { ref, isVisible } = useInView<HTMLDivElement>()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
 
   return (
     <section id="cta" className="py-24">
@@ -22,7 +23,7 @@ const CTA = () => {
           </p>
           <div className="relative mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
-              href="#"
+              href={localizedHref('/pricing', lang)}
               className="w-full rounded-xl bg-white px-8 py-3.5 text-base font-semibold text-blue-600 transition hover:bg-blue-50 sm:w-auto"
             >
               {t.cta.primary}

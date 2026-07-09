@@ -1,4 +1,5 @@
 import { useLanguage } from '../context/LanguageContext'
+import { localizedHref } from '../i18n/routing'
 
 const sourcesMeta = [
   { key: 'Carriers' as const, color: 'bg-rose-400', dot: '#fb7185' },
@@ -9,7 +10,7 @@ const sourcesMeta = [
 ]
 
 const Hero = () => {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const sources = sourcesMeta.map((s) => ({ ...s, label: t.hero.sources[s.key] }))
 
   return (
@@ -33,7 +34,7 @@ const Hero = () => {
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
-            href="#cta"
+            href={localizedHref('/pricing', lang)}
             className="w-full rounded-xl bg-blue-600 px-8 py-3.5 text-base font-semibold text-white transition hover:bg-blue-500 sm:w-auto"
           >
             {t.hero.ctaPrimary}

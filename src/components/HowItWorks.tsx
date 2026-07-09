@@ -1,9 +1,10 @@
 import { useInView } from '../hooks/useInView'
 import { useLanguage } from '../context/LanguageContext'
+import { localizedHref } from '../i18n/routing'
 
 const HowItWorks = () => {
   const { ref, isVisible } = useInView<HTMLDivElement>()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const h = t.howItWorks
 
   return (
@@ -44,6 +45,15 @@ const HowItWorks = () => {
               </p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-14 flex justify-center">
+          <a
+            href={localizedHref('/pricing', lang)}
+            className="inline-flex items-center rounded-xl bg-blue-600 px-8 py-3.5 text-base font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            {t.hero.ctaPrimary}
+          </a>
         </div>
       </div>
     </section>

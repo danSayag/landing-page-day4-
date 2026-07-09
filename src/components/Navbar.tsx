@@ -64,7 +64,7 @@ const Navbar = () => {
           <LanguageSwitcher className="hidden sm:inline-flex" />
 
           <a
-            href={localizedHref('/#cta', lang)}
+            href={localizedHref('/pricing', lang)}
             className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             {t.nav.getStarted}
@@ -112,7 +112,6 @@ const Navbar = () => {
                 </li>
               )
             })}
-            {/* Language switcher in mobile menu */}
             
           </ul>
         </div>

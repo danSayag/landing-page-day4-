@@ -40,8 +40,8 @@ function StatsPanel({ items }: { items: { value: string; label: string }[] }) {
   return (
     <div className="grid grid-cols-3 gap-3">
       {items.map((item) => (
-        <div key={item.label} className="rounded-lg bg-blue-50 p-3 text-center">
-          <p className="text-lg font-bold text-blue-600">{item.value}</p>
+        <div key={item.label} className="rounded-lg bg-blue-50 p-2 text-center">
+          <p className="text-base font-bold text-blue-600">{item.value}</p>
           <p className="text-[11px] text-gray-500">{item.label}</p>
         </div>
       ))}
@@ -53,7 +53,7 @@ function TablePanel({ rows }: { rows: { main: string; sub: string; badge: string
   return (
     <div className="flex flex-col gap-2">
       {rows.map((row) => (
-        <div key={row.main + row.sub} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2.5">
+        <div key={row.main + row.sub} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-1.5">
           <div>
             <p className="text-xs font-semibold text-gray-800">{row.main}</p>
             <p className="text-[11px] text-gray-400">{row.sub}</p>
@@ -71,7 +71,7 @@ function BubblesPanel({ items }: { items: { title: string; sub: string; accent?:
       {items.map((item) => (
         <div
           key={item.title}
-          className={`rounded-xl px-3 py-2.5 ${item.accent ? 'bg-blue-600 text-white' : 'border border-gray-100 bg-white shadow-sm'}`}
+          className={`rounded-xl px-3 py-1.5 ${item.accent ? 'bg-blue-600 text-white' : 'border border-gray-100 bg-white shadow-sm'}`}
         >
           <p className={`text-xs font-semibold ${item.accent ? 'text-white' : 'text-gray-800'}`}>{item.title}</p>
           <p className={`text-[11px] ${item.accent ? 'text-blue-100' : 'text-gray-400'}`}>{item.sub}</p>
@@ -83,7 +83,7 @@ function BubblesPanel({ items }: { items: { title: string; sub: string; accent?:
 
 function TimelinePanel({ done, labels }: { done: number; labels: string[] }) {
   return (
-    <div className="px-2 py-6">
+    <div className="px-2 py-4">
       <div className="relative flex items-center justify-between">
         <div className="hc-line absolute inset-x-2 top-1/2 h-1 -translate-y-1/2 rounded bg-gray-200" />
         <div
@@ -116,8 +116,8 @@ function RosterPanel({ rows }: { rows: { name: string; role: string; pct: number
   return (
     <div className="flex flex-col gap-2">
       {rows.map((row) => (
-        <div key={row.name} className="flex items-center gap-3 rounded-lg bg-gray-50 px-3 py-2.5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[10px] font-bold text-blue-600">
+        <div key={row.name} className="flex items-center gap-3 rounded-lg bg-gray-50 px-3 py-1.5">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[10px] font-bold text-blue-600">
             {row.name.split(' ').map((w) => w[0]).join('')}
           </span>
           <div className="min-w-0 flex-1">
@@ -136,7 +136,7 @@ function RosterPanel({ rows }: { rows: { name: string; role: string; pct: number
 
 function MapPanel() {
   return (
-    <svg viewBox="0 0 400 220" className="h-52 w-full rounded-xl border border-blue-50 bg-linear-to-br from-blue-50 to-slate-100" aria-hidden="true">
+    <svg viewBox="0 0 400 220" className="h-full min-h-24 w-full rounded-xl border border-blue-50 bg-linear-to-br from-blue-50 to-slate-100" aria-hidden="true">
       <rect x="185" y="115" width="60" height="42" rx="8" fill="#d1fae5" />
       <rect x="80" y="48" width="66" height="40" rx="8" fill="#e2e8f0" opacity="0.6" />
       <g stroke="#ffffff" strokeWidth="10" strokeLinecap="round">
@@ -167,7 +167,7 @@ function SortPanel() {
     'M14 55 H58 C82 55 84 88 108 88 H188',
   ]
   return (
-    <svg viewBox="0 0 220 110" className="h-52 w-full rounded-xl border border-blue-50 bg-linear-to-br from-blue-50 to-slate-100" aria-hidden="true">
+    <svg viewBox="0 0 220 110" className="h-full min-h-24 w-full rounded-xl border border-blue-50 bg-linear-to-br from-blue-50 to-slate-100" aria-hidden="true">
       <g fill="none" stroke="#cbd5e1" strokeWidth="2" strokeLinecap="round" strokeDasharray="1 7">
         {lanes.map((d) => (
           <path key={d} d={d} />
@@ -201,8 +201,8 @@ function BarsPanel() {
     { x: 220, h: 72, highlight: true },
   ]
   return (
-    <div className="relative">
-      <svg viewBox="0 0 280 110" className="h-52 w-full rounded-xl border border-blue-50 bg-linear-to-br from-blue-50 to-slate-100" aria-hidden="true">
+    <div className="relative h-full">
+      <svg viewBox="0 0 280 110" className="h-full min-h-24 w-full rounded-xl border border-blue-50 bg-linear-to-br from-blue-50 to-slate-100" aria-hidden="true">
         <g stroke="#e2e8f0" strokeWidth="1">
           <path d="M14 20 H266" />
           <path d="M14 45 H266" />
@@ -234,7 +234,15 @@ function Panel({ spec }: { spec: PanelSpec }) {
 }
 
 // ── Dashboard mock frame ─────────────────────────────────────────────────────
-function DashboardFrame({ activeIndex, children }: { activeIndex: number; children: ReactNode }) {
+function DashboardFrame({
+  activeIndex,
+  popKey = 0,
+  children,
+}: {
+  activeIndex: number
+  popKey?: number
+  children: ReactNode
+}) {
   const { t } = useLanguage()
   const fp = t.featuresPage
   return (
@@ -247,58 +255,104 @@ function DashboardFrame({ activeIndex, children }: { activeIndex: number; childr
       </div>
       <div className="flex">
         <div className="hidden w-36 shrink-0 flex-col gap-1 border-e border-gray-100 bg-gray-50/60 p-3 sm:flex">
-          {fp.sidebar.map((item, i) => (
-            <span
-              key={item}
-              className={`rounded-md px-2.5 py-1.5 text-[11px] font-medium ${
-                i === activeIndex ? 'bg-blue-600 text-white' : 'text-gray-500'
-              }`}
-            >
-              {item}
-            </span>
-          ))}
+          {fp.sidebar.map((item, i) => {
+            const isActive = i === activeIndex
+            return (
+              <span
+                // Re-mount the active tab whenever popKey changes so the pop animation replays.
+                key={isActive ? `${item}-${popKey}` : item}
+                className={`origin-center rounded-md px-2.5 py-1.5 text-[11px] font-medium transition-colors ${
+                  isActive
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30 animate-[sidebar-pop_0.5s_ease-out]'
+                    : 'text-gray-400'
+                }`}
+              >
+                {item}
+              </span>
+            )
+          })}
         </div>
-        <div className="min-h-64 flex-1 p-4">{children}</div>
+        {/* Fixed height so every mini dashboard renders the same size;
+            short content is centred, flexible panels absorb the rest. */}
+        <div className="h-112 min-w-0 flex-1 p-4">
+          <div className="flex h-full flex-col justify-center">{children}</div>
+        </div>
       </div>
     </div>
   )
 }
 
-// ── One feature's scroll story ───────────────────────────────────────────────
-type Feature = (typeof features)[number]
-
-function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step[]; index: number }) {
-  const { t, lang } = useLanguage()
+// ── Scroll-spy: one IntersectionObserver reports the centred block ───────────
+// Watches every tracked element and returns the index of the one inside the
+// viewport's central band. State only changes when the active index changes, so
+// scrolling stays cheap (no scroll listeners, no per-frame work).
+function useScrollSpy(count: number, band = 0.4) {
   const [active, setActive] = useState(0)
-  const stepRefs = useRef<(HTMLDivElement | null)[]>([])
+  const els = useRef<(HTMLElement | null)[]>([])
+  const collect = (i: number) => (el: HTMLElement | null) => {
+    els.current[i] = el
+  }
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = []
-    stepRefs.current.forEach((el, i) => {
-      if (!el) return
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActive(i)
-        },
-        // a step becomes active when it crosses the middle of the viewport
-        { rootMargin: '-45% 0px -45% 0px' },
-      )
-      observer.observe(el)
-      observers.push(observer)
-    })
-    return () => observers.forEach((o) => o.disconnect())
+    const margin = `${Math.round(band * 100)}%`
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const i = els.current.indexOf(entry.target as HTMLElement)
+            if (i !== -1) setActive((prev) => (prev === i ? prev : i))
+          }
+        }
+      },
+      // Negative top/bottom margins shrink the root to a central strip.
+      { rootMargin: `-${margin} 0px -${margin} 0px`, threshold: 0 },
+    )
+    els.current.forEach((el) => el && observer.observe(el))
+    return () => observer.disconnect()
+  }, [count, band])
+
+  return { active, collect }
+}
+
+// ── One feature group: centred major header, then the two-column story ───────
+function FeatureGroup({
+  feature,
+  steps,
+  title,
+  description,
+}: {
+  feature: (typeof features)[number]
+  steps: Step[]
+  title: string
+  description: string
+}) {
+  const { t, lang } = useLanguage()
+  const fp = t.featuresPage
+  const { active, collect } = useScrollSpy(steps.length)
+  const sidebarIndex = navIndex[feature.slug] ?? 0
+
+  // Replay the sidebar tab's pop each time this feature scrolls into view.
+  const [popKey, setPopKey] = useState(0)
+  const sectionRef = useRef<HTMLElement | null>(null)
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setPopKey((k) => k + 1)
+      },
+      { rootMargin: '-40% 0px -40% 0px' },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
   }, [])
 
-  const activeSidebarIndex = navIndex[feature.slug] ?? 0
-  const item = (t.features.items as Record<string, { title: string; description: string }>)[feature.slug]
-  const title = item?.title ?? feature.title
-  const description = item?.description ?? feature.description
-
   return (
-    <section id={feature.slug} className={`scroll-mt-20 ${index % 2 === 1 ? 'bg-gray-50' : 'bg-white'}`}>
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <section ref={sectionRef} id={feature.slug} className="scroll-mt-20">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        {/* MAJOR HEADER — centred on the page, describes this dashboard page */}
         <div className="mx-auto max-w-2xl text-center">
-          <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-200">
+          <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-200 [&>svg]:h-6 [&>svg]:w-6">
             {feature.icon}
           </span>
           <h2 className="mt-5 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
@@ -308,40 +362,75 @@ function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step
         </div>
 
         <div className="lg:grid lg:grid-cols-2 lg:gap-16">
+          {/* LEFT — subheaders, scrolling normally */}
           <div>
             {steps.map((step, i) => (
               <div
                 key={step.title}
-                ref={(el) => {
-                  stepRefs.current[i] = el
-                }}
-                className="flex flex-col justify-center py-12 lg:min-h-[60vh] lg:py-0"
+                ref={collect(i)}
+                className="flex flex-col justify-center py-10 lg:min-h-[62vh] lg:py-0"
               >
-                <span
-                  className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold transition-colors duration-300 ${
-                    active === i ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600'
+                <h3
+                  className={`text-2xl font-bold tracking-tight sm:text-3xl transition-colors duration-300 ${
+                    active === i ? 'text-gray-900' : 'text-gray-900 lg:text-gray-400'
                   }`}
                 >
-                  {i + 1}
-                </span>
-                <h3 className="mt-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{step.title}</h3>
-                <p className="mt-3 text-lg leading-8 text-gray-600">{step.text}</p>
-                {/* on small screens each step shows its own dashboard */}
+                  {step.title}
+                </h3>
+                <p
+                  className={`mt-3 text-lg leading-8 transition-colors duration-300 ${
+                    active === i ? 'text-gray-600' : 'text-gray-600 lg:text-gray-400'
+                  }`}
+                >
+                  {step.text}
+                </p>
+                {/* small CTA under the group's last text */}
+                {i === steps.length - 1 && (
+                  <div className="mt-6">
+                    <a
+                      href={localizedHref('/pricing', lang)}
+                      className="inline-flex items-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                      {fp.startTrial}
+                    </a>
+                  </div>
+                )}
+                {/* MOBILE — each step carries its own dashboard (stacked layout) */}
                 <div className="mt-8 lg:hidden">
-                  <DashboardFrame activeIndex={activeSidebarIndex}>
+                  <DashboardFrame activeIndex={sidebarIndex}>
                     <Panel spec={step.panel} />
                   </DashboardFrame>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* RIGHT — sticky dashboard showing this feature's whole "page";
+              the active subheader's component pops, the rest recede */}
           <div className="hidden lg:block">
             <div className="sticky top-24 py-12">
-              <DashboardFrame activeIndex={activeSidebarIndex}>
-                <div key={active} className="animate-[feature-fade_0.45s_ease-out]">
-                  <Panel spec={steps[active].panel} />
+              <DashboardFrame activeIndex={sidebarIndex} popKey={popKey}>
+                <div className="flex h-full flex-col justify-between gap-2">
+                  {steps.map((step, si) => (
+                    <div
+                      // Re-key the newly active card so its pop animation replays.
+                      // Flexible SVG panels absorb the leftover height so every
+                      // feature's "page" fills the frame identically.
+                      key={si === active ? `on-${si}` : `off-${si}`}
+                      className={`min-h-0 rounded-xl p-1 transition-all duration-300 ${
+                        ['map', 'sort', 'bars'].includes(step.panel.kind) ? 'flex-1' : ''
+                      } ${
+                        si === active
+                          ? 'bg-blue-50/40 ring-2 ring-blue-500 shadow-lg shadow-blue-500/10 animate-[sidebar-pop_0.5s_ease-out]'
+                          : 'scale-[0.98] opacity-40'
+                      }`}
+                    >
+                      <Panel spec={step.panel} />
+                    </div>
+                  ))}
                 </div>
               </DashboardFrame>
+              {/* one progress dot per subheader */}
               <div className="mt-6 flex justify-center gap-2">
                 {steps.map((step, i) => (
                   <span
@@ -355,23 +444,32 @@ function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step
             </div>
           </div>
         </div>
-
-        <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <a
-            href={localizedHref('/#cta', lang)}
-            className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 sm:w-auto"
-          >
-            {t.featuresPage.startTrial}
-          </a>
-          <a
-            href={localizedHref('/pricing', lang)}
-            className="text-sm font-semibold text-blue-600 transition hover:text-blue-500"
-          >
-            {t.featuresPage.seePricingArrow}
-          </a>
-        </div>
       </div>
     </section>
+  )
+}
+
+// ── All feature groups, one after another ────────────────────────────────────
+function FeatureShowcase() {
+  const { t } = useLanguage()
+  const stories = t.featuresPage.stories as unknown as Record<string, Step[]>
+  const items = t.features.items as Record<string, { title: string; description: string }>
+
+  return (
+    <>
+      {features.map((feature) => (
+        <FeatureGroup
+          key={feature.slug}
+          feature={feature}
+          steps={
+            stories[feature.slug] ??
+            ([{ title: feature.title, text: feature.detail, panel: { kind: 'map' } }] as Step[])
+          }
+          title={items[feature.slug]?.title ?? feature.title}
+          description={items[feature.slug]?.description ?? feature.description}
+        />
+      ))}
+    </>
   )
 }
 
@@ -379,7 +477,24 @@ function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step
 const FeaturesPage = () => {
   const { t, lang } = useLanguage()
   const fp = t.featuresPage
-  const stories = fp.stories as unknown as Record<string, Step[]>
+
+  // Deep links like /features#package-tracking must scroll to their section.
+  // On a fresh SPA load the target isn't in the DOM when the browser first
+  // tries to jump, so we scroll ourselves (retrying until the section renders).
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1))
+    if (!id) return
+    let tries = 0
+    const tryScroll = () => {
+      const el = document.getElementById(id)
+      if (el) {
+        el.scrollIntoView({ block: 'start' })
+      } else if (tries++ < 10) {
+        setTimeout(tryScroll, 60)
+      }
+    }
+    tryScroll()
+  }, [])
 
   return (
     <div className="pt-16">
@@ -396,7 +511,7 @@ const FeaturesPage = () => {
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
-              href={localizedHref('/#cta', lang)}
+              href={localizedHref('/pricing', lang)}
               className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 sm:w-auto"
             >
               {fp.startTrial}
@@ -414,17 +529,7 @@ const FeaturesPage = () => {
         </div>
       </section>
 
-      {features.map((feature, index) => (
-        <FeatureStory
-          key={feature.slug}
-          feature={feature}
-          steps={
-            stories[feature.slug] ??
-            ([{ title: feature.title, text: feature.detail, panel: { kind: 'map' } }] as Step[])
-          }
-          index={index}
-        />
-      ))}
+      <FeatureShowcase />
 
       <section className="bg-gray-50">
         <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
@@ -436,7 +541,7 @@ const FeaturesPage = () => {
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
-              href={localizedHref('/#cta', lang)}
+              href={localizedHref('/pricing', lang)}
               className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 sm:w-auto"
             >
               {fp.startTrial}

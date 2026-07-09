@@ -11,3 +11,16 @@
     transform: translateY(0);
   }
 }
+
+/* The active sidebar tab "pops" when its feature scrolls into view. */
+@keyframes sidebar-pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
