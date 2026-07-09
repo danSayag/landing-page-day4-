@@ -1,63 +1,23 @@
 import { useInView } from '../hooks/useInView'
-
-const plans = [
-  {
-    name: 'Starter',
-    price: '$0',
-    period: '/month',
-    description: 'For small teams getting started.',
-    features: ['Up to 50 shipments/month', '1 team member', 'Community support', 'Basic tracking'],
-    cta: 'Start for free',
-    highlighted: false,
-  },
-  {
-    name: 'Pro',
-    price: '$29',
-    period: '/month',
-    description: 'For growing companies shipping at scale.',
-    features: [
-      'Unlimited shipments',
-      'Up to 20 team members',
-      'Priority support',
-      'Advanced analytics',
-      'Automation builder',
-      'Discounted carrier rates',
-    ],
-    cta: 'Start free trial',
-    highlighted: true,
-  },
-  {
-    name: 'Enterprise',
-    price: 'Custom',
-    period: '',
-    description: 'For organizations with advanced needs.',
-    features: [
-      'Everything in Pro',
-      'Unlimited team members',
-      'SSO & audit logs',
-      'Dedicated success manager',
-      'SLA & custom contracts',
-    ],
-    cta: 'Contact sales',
-    highlighted: false,
-  },
-]
+import { useLanguage } from '../context/LanguageContext'
+import { localizedHref } from '../i18n/routing'
 
 const Pricing = () => {
   const { ref, isVisible } = useInView<HTMLDivElement>()
+  const { t, lang } = useLanguage()
 
   return (
     <section id="pricing" className="py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <span className="text-sm font-semibold uppercase tracking-widest text-blue-600">
-            Pricing
+            {t.pricing.sectionLabel}
           </span>
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
-            Simple, transparent pricing
+            {t.pricing.sectionTitle}
           </h2>
           <p className="mt-4 text-lg text-gray-500">
-            Start free, upgrade when you're ready. No hidden fees, cancel anytime.
+            {t.pricing.sectionDescription}
           </p>
         </div>
 
@@ -67,7 +27,7 @@ const Pricing = () => {
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
           }`}
         >
-          {plans.map((plan) => (
+          {t.pricing.plans.map((plan) => (
             <div
               key={plan.name}
               className={`relative flex flex-col rounded-2xl border p-8 ${
@@ -78,7 +38,7 @@ const Pricing = () => {
             >
               {plan.highlighted && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white shadow-md shadow-blue-500/25">
-                  Most popular
+                  {t.pricing.mostPopular}
                 </span>
               )}
               <h3 className="text-lg font-semibold text-gray-900">{plan.name}</h3>
@@ -98,7 +58,7 @@ const Pricing = () => {
               </ul>
 
               <a
-                href="/#cta"
+                href={localizedHref('/#cta', lang)}
                 className={`mt-8 rounded-xl px-6 py-3 text-center text-sm font-semibold transition ${
                   plan.highlighted
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 hover:bg-blue-500'

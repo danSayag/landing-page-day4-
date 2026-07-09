@@ -1,52 +1,8 @@
 import { Fragment } from 'react'
 import { useInView } from '../hooks/useInView'
+import { useLanguage } from '../context/LanguageContext'
 
 type CellValue = string | boolean
-
-interface Row {
-  feature: string
-  starter: CellValue
-  pro: CellValue
-  enterprise: CellValue
-}
-
-const sections: { title: string; rows: Row[] }[] = [
-  {
-    title: 'Shipping',
-    rows: [
-      { feature: 'Monthly shipments', starter: 'Up to 50', pro: 'Unlimited', enterprise: 'Unlimited' },
-      { feature: 'Bulk label creation', starter: false, pro: true, enterprise: true },
-      { feature: 'Scheduled pickups', starter: true, pro: true, enterprise: true },
-      { feature: 'Automatic carrier selection', starter: false, pro: true, enterprise: true },
-      { feature: 'Discounted carrier rates', starter: false, pro: true, enterprise: 'Custom rates' },
-    ],
-  },
-  {
-    title: 'Tracking & analytics',
-    rows: [
-      { feature: 'Real-time tracking', starter: true, pro: true, enterprise: true },
-      { feature: 'Delivery alerts', starter: false, pro: true, enterprise: true },
-      { feature: 'Advanced analytics', starter: false, pro: true, enterprise: true },
-      { feature: 'Carrier performance reports', starter: false, pro: true, enterprise: true },
-    ],
-  },
-  {
-    title: 'Team & security',
-    rows: [
-      { feature: 'Team members', starter: '1', pro: 'Up to 20', enterprise: 'Unlimited' },
-      { feature: 'Automation builder', starter: false, pro: true, enterprise: true },
-      { feature: 'Role-based access control', starter: false, pro: true, enterprise: true },
-      { feature: 'SSO & audit logs', starter: false, pro: false, enterprise: true },
-    ],
-  },
-  {
-    title: 'Support',
-    rows: [
-      { feature: 'Support level', starter: 'Community', pro: 'Priority', enterprise: 'Dedicated manager' },
-      { feature: 'SLA & custom contracts', starter: false, pro: false, enterprise: true },
-    ],
-  },
-]
 
 const Cell = ({ value }: { value: CellValue }) => {
   if (value === true) return <span className="font-semibold text-blue-600">✓</span>
@@ -56,16 +12,18 @@ const Cell = ({ value }: { value: CellValue }) => {
 
 const PricingTable = () => {
   const { ref, isVisible } = useInView<HTMLDivElement>()
+  const { t } = useLanguage()
+  const pt = t.pricingTable
 
   return (
     <section className="pb-24">
       <div className="mx-auto max-w-5xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Compare plans
+            {pt.title}
           </h2>
           <p className="mt-4 text-lg text-gray-500">
-            Everything you get with each tier, side by side.
+            {pt.subtitle}
           </p>
         </div>
 
@@ -75,19 +33,19 @@ const PricingTable = () => {
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
           }`}
         >
-          <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+          <table className="w-full min-w-[640px] border-collapse text-start text-sm">
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50">
-                <th className="px-6 py-4 font-semibold text-gray-900">Features</th>
-                <th className="px-6 py-4 text-center font-semibold text-gray-900">Starter</th>
+                <th className="px-6 py-4 font-semibold text-gray-900">{pt.columns.features}</th>
+                <th className="px-6 py-4 text-center font-semibold text-gray-900">{pt.columns.starter}</th>
                 <th className="bg-blue-50/60 px-6 py-4 text-center font-semibold text-blue-600">
-                  Pro
+                  {pt.columns.pro}
                 </th>
-                <th className="px-6 py-4 text-center font-semibold text-gray-900">Enterprise</th>
+                <th className="px-6 py-4 text-center font-semibold text-gray-900">{pt.columns.enterprise}</th>
               </tr>
             </thead>
             <tbody>
-              {sections.map((section) => (
+              {pt.sections.map((section) => (
                 <Fragment key={section.title}>
                   <tr className="border-b border-gray-200 bg-gray-50/60">
                     <td

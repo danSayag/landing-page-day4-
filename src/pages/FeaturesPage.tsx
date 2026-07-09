@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { features } from '../data/features'
+import { useLanguage } from '../context/LanguageContext'
+import { localizedHref } from '../i18n/routing'
 
 // ── Panel specs: what the dashboard mock shows at each scroll step ──────────
 type PanelSpec =
@@ -23,200 +25,14 @@ const TONE: Record<Tone, string> = {
 
 type Step = { title: string; text: string; panel: PanelSpec }
 
-const STORIES: Record<string, Step[]> = {
-  'package-tracking': [
-    {
-      title: 'Every parcel on a live map',
-      text: 'The Tracking tab shows all active routes in real time. Watch each driver move across the city and spot problems before they reach the customer.',
-      panel: { kind: 'map' },
-    },
-    {
-      title: 'Live status for every package',
-      text: 'Each shipment updates the second it changes — picked up, at hub, out for delivery. No calls to drivers, no guessing.',
-      panel: {
-        kind: 'table',
-        rows: [
-          { main: 'PKG-3821', sub: 'New York → Boston', badge: 'In transit', tone: 'blue' },
-          { main: 'PKG-5504', sub: 'Chicago → Detroit', badge: 'Out for delivery', tone: 'green' },
-          { main: 'PKG-0193', sub: 'Austin → Dallas', badge: 'At hub', tone: 'amber' },
-        ],
-      },
-    },
-    {
-      title: 'Your numbers, always current',
-      text: 'The overview tiles update themselves as packages move, so your morning starts with real data instead of yesterday’s export.',
-      panel: {
-        kind: 'stats',
-        items: [
-          { value: '1,248', label: 'In transit' },
-          { value: '98.6%', label: 'On time' },
-          { value: '312', label: 'Delivered today' },
-        ],
-      },
-    },
-  ],
-  'mail-sorting': [
-    {
-      title: 'All incoming mail in one queue',
-      text: 'Every letter and parcel that enters the depot is scanned once and lands in a single queue on the dashboard.',
-      panel: {
-        kind: 'bubbles',
-        items: [
-          { title: 'Invoice #4421', sub: 'Sarah M. · Zone North', accent: true },
-          { title: 'Certified letter', sub: 'USPS · Zone Center' },
-          { title: 'Return request', sub: 'Tom Wren · Zone Docks' },
-        ],
-      },
-    },
-    {
-      title: 'Auto-routed to the right hub',
-      text: 'Sorting rules send each item down the right lane automatically — by zip, route, or service level. You watch every lane live.',
-      panel: { kind: 'sort' },
-    },
-    {
-      title: 'Nothing gets misplaced',
-      text: 'Misroutes show up on the board immediately, so they get fixed at the depot — not at an angry customer’s door.',
-      panel: {
-        kind: 'stats',
-        items: [
-          { value: '2,431', label: 'Sorted today' },
-          { value: '3', label: 'Hubs synced' },
-          { value: '0', label: 'Misplaced' },
-        ],
-      },
-    },
-  ],
-  'customer-notifications': [
-    {
-      title: 'Automatic SMS & email updates',
-      text: 'Write your message templates once. From then on, every status change sends the right message to the right customer — automatically.',
-      panel: {
-        kind: 'bubbles',
-        items: [
-          { title: 'Your package is out for delivery', sub: 'SMS · +1 555-0142', accent: true },
-          { title: 'Delivered — photo attached', sub: 'Email · anna@example.com' },
-          { title: 'Pickup scheduled for 9:00', sub: 'SMS · +1 555-0198' },
-        ],
-      },
-    },
-    {
-      title: 'Triggered by real delivery events',
-      text: 'Notifications fire exactly when the parcel moves — not on a timer. Customers see the same truth your dispatchers see.',
-      panel: { kind: 'timeline', done: 2, labels: ['Picked up', 'In transit', 'Delivered'] },
-    },
-    {
-      title: 'Fewer “where is my package?” calls',
-      text: 'When customers already know, they stop calling. Your team gets its day back.',
-      panel: {
-        kind: 'stats',
-        items: [
-          { value: '-62%', label: 'Support calls' },
-          { value: '4.9★', label: 'Delivery rating' },
-          { value: '100%', label: 'Customers informed' },
-        ],
-      },
-    },
-  ],
-  'staff-management': [
-    {
-      title: 'Your whole team in one view',
-      text: 'Drivers, sorters, and dispatchers — who’s on shift, what they’re carrying, and where they are right now.',
-      panel: {
-        kind: 'roster',
-        rows: [
-          { name: 'James R.', role: 'Van · #V-14', pct: 100 },
-          { name: 'Maria L.', role: 'Truck · #T-07', pct: 75 },
-          { name: 'Priya S.', role: 'Truck · #T-03', pct: 45 },
-        ],
-      },
-    },
-    {
-      title: 'Assign routes in seconds',
-      text: 'Drag a route onto a driver and they get it on their phone instantly — with stops, packages, and directions.',
-      panel: {
-        kind: 'table',
-        rows: [
-          { main: 'James R.', sub: 'Route 12 · North', badge: 'Assigned', tone: 'green' },
-          { main: 'Maria L.', sub: 'Route 4 · Docks', badge: 'Assigned', tone: 'green' },
-          { main: 'David K.', sub: 'Route 9 · Center', badge: 'Pending', tone: 'amber' },
-        ],
-      },
-    },
-    {
-      title: 'Shifts planned ahead',
-      text: 'Coverage gaps and double-bookings are flagged before they happen, not discovered at 6 AM.',
-      panel: {
-        kind: 'stats',
-        items: [
-          { value: '12', label: 'Drivers on shift' },
-          { value: '98%', label: 'Route coverage' },
-          { value: '0', label: 'Conflicts' },
-        ],
-      },
-    },
-  ],
-  'delivery-status': [
-    {
-      title: 'A live board of every delivery',
-      text: 'One board shows each delivery moving through its stages. Green means moving, and everything else gets your attention.',
-      panel: { kind: 'timeline', done: 3, labels: ['Picked up', 'In transit', 'Delivered'] },
-    },
-    {
-      title: 'Delays flagged before customers notice',
-      text: 'Exceptions and delays bubble to the top of the board automatically, so dispatch fixes them while there’s still time.',
-      panel: {
-        kind: 'table',
-        rows: [
-          { main: 'PKG-7741', sub: 'Seattle → Portland', badge: 'On time', tone: 'green' },
-          { main: 'PKG-2290', sub: 'Miami → Orlando', badge: 'Delayed 20m', tone: 'rose' },
-          { main: 'PKG-5504', sub: 'Chicago → Detroit', badge: 'Exception', tone: 'amber' },
-        ],
-      },
-    },
-    {
-      title: 'Proof of delivery, attached',
-      text: 'Signatures and photos are stored with each delivery, so disputes end with a link instead of a phone chain.',
-      panel: {
-        kind: 'stats',
-        items: [
-          { value: '312', label: 'Delivered today' },
-          { value: '307', label: 'Signatures' },
-          { value: '5', label: 'Photo proof' },
-        ],
-      },
-    },
-  ],
-  'reports-analytics': [
-    {
-      title: 'Your week at a glance',
-      text: 'Volume, on-time rate, and team performance — charted live on the Reports tab, no spreadsheet required.',
-      panel: { kind: 'bars' },
-    },
-    {
-      title: 'Spot trends before they cost you',
-      text: 'Week-over-week changes are computed for you. When a route slows down or costs creep up, you see it first.',
-      panel: {
-        kind: 'table',
-        rows: [
-          { main: 'On-time rate', sub: 'vs last week', badge: '+1.2%', tone: 'green' },
-          { main: 'Avg delivery time', sub: 'vs last week', badge: '-4 min', tone: 'green' },
-          { main: 'Cost per package', sub: 'vs last week', badge: '-$0.11', tone: 'green' },
-        ],
-      },
-    },
-    {
-      title: 'A digest in your inbox every Monday',
-      text: 'The numbers that matter, summarized and delivered — before your first coffee.',
-      panel: {
-        kind: 'bubbles',
-        items: [
-          { title: 'Weekly digest', sub: '8,240 packages delivered', accent: true },
-          { title: 'Top route', sub: 'North · 1,204 stops' },
-          { title: 'Needs attention', sub: '3 routes ran late twice' },
-        ],
-      },
-    },
-  ],
+// Which sidebar tab (by index) lights up for each feature — language-independent
+const navIndex: Record<string, number> = {
+  'package-tracking': 1,
+  'mail-sorting': 2,
+  'customer-notifications': 3,
+  'staff-management': 4,
+  'delivery-status': 5,
+  'reports-analytics': 6,
 }
 
 // ── Mock panels ──────────────────────────────────────────────────────────────
@@ -311,7 +127,7 @@ function RosterPanel({ rows }: { rows: { name: string; role: string; pct: number
           <div className="h-1.5 w-20 overflow-hidden rounded-full bg-gray-200">
             <div className="h-full rounded-full bg-blue-600" style={{ width: `${row.pct}%` }} />
           </div>
-          <span className="w-9 text-right text-[10px] font-semibold text-gray-500">{row.pct}%</span>
+          <span className="w-9 text-end text-[10px] font-semibold text-gray-500">{row.pct}%</span>
         </div>
       ))}
     </div>
@@ -375,6 +191,7 @@ function SortPanel() {
 }
 
 function BarsPanel() {
+  const { t } = useLanguage()
   const bars = [
     { x: 20, h: 28 },
     { x: 60, h: 45 },
@@ -396,8 +213,8 @@ function BarsPanel() {
           <rect key={x} x={x} y={95 - h} width="26" height={h} rx="4" fill={highlight ? '#2563eb' : '#bfdbfe'} />
         ))}
       </svg>
-      <span className="absolute top-3 right-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-green-600 shadow-sm backdrop-blur">
-        +24% this week
+      <span className="absolute top-3 end-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-green-600 shadow-sm backdrop-blur">
+        {t.featuresPage.barsBadge}
       </span>
     </div>
   )
@@ -417,33 +234,24 @@ function Panel({ spec }: { spec: PanelSpec }) {
 }
 
 // ── Dashboard mock frame ─────────────────────────────────────────────────────
-const SIDEBAR = ['Overview', 'Tracking', 'Sorting', 'Notifications', 'Staff', 'Deliveries', 'Reports']
-
-const NAV: Record<string, string> = {
-  'package-tracking': 'Tracking',
-  'mail-sorting': 'Sorting',
-  'customer-notifications': 'Notifications',
-  'staff-management': 'Staff',
-  'delivery-status': 'Deliveries',
-  'reports-analytics': 'Reports',
-}
-
-function DashboardFrame({ active, children }: { active: string; children: ReactNode }) {
+function DashboardFrame({ activeIndex, children }: { activeIndex: number; children: ReactNode }) {
+  const { t } = useLanguage()
+  const fp = t.featuresPage
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl shadow-blue-50">
       <div className="flex items-center gap-1.5 border-b border-gray-100 bg-gray-50 px-4 py-3">
         <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
         <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
         <span className="h-2.5 w-2.5 rounded-full bg-green-300" />
-        <span className="ml-3 text-xs font-medium text-gray-400">Nova Dashboard</span>
+        <span className="ms-3 text-xs font-medium text-gray-400">{fp.dashboardName}</span>
       </div>
       <div className="flex">
-        <div className="hidden w-36 shrink-0 flex-col gap-1 border-r border-gray-100 bg-gray-50/60 p-3 sm:flex">
-          {SIDEBAR.map((item) => (
+        <div className="hidden w-36 shrink-0 flex-col gap-1 border-e border-gray-100 bg-gray-50/60 p-3 sm:flex">
+          {fp.sidebar.map((item, i) => (
             <span
               key={item}
               className={`rounded-md px-2.5 py-1.5 text-[11px] font-medium ${
-                item === active ? 'bg-blue-600 text-white' : 'text-gray-500'
+                i === activeIndex ? 'bg-blue-600 text-white' : 'text-gray-500'
               }`}
             >
               {item}
@@ -460,6 +268,7 @@ function DashboardFrame({ active, children }: { active: string; children: ReactN
 type Feature = (typeof features)[number]
 
 function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step[]; index: number }) {
+  const { t, lang } = useLanguage()
   const [active, setActive] = useState(0)
   const stepRefs = useRef<(HTMLDivElement | null)[]>([])
 
@@ -480,7 +289,10 @@ function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step
     return () => observers.forEach((o) => o.disconnect())
   }, [])
 
-  const nav = NAV[feature.slug] ?? 'Overview'
+  const activeSidebarIndex = navIndex[feature.slug] ?? 0
+  const item = (t.features.items as Record<string, { title: string; description: string }>)[feature.slug]
+  const title = item?.title ?? feature.title
+  const description = item?.description ?? feature.description
 
   return (
     <section id={feature.slug} className={`scroll-mt-20 ${index % 2 === 1 ? 'bg-gray-50' : 'bg-white'}`}>
@@ -490,9 +302,9 @@ function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step
             {feature.icon}
           </span>
           <h2 className="mt-5 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            {feature.title}
+            {title}
           </h2>
-          <p className="mt-3 text-lg text-gray-600">{feature.description}</p>
+          <p className="mt-3 text-lg text-gray-600">{description}</p>
         </div>
 
         <div className="lg:grid lg:grid-cols-2 lg:gap-16">
@@ -516,7 +328,7 @@ function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step
                 <p className="mt-3 text-lg leading-8 text-gray-600">{step.text}</p>
                 {/* on small screens each step shows its own dashboard */}
                 <div className="mt-8 lg:hidden">
-                  <DashboardFrame active={nav}>
+                  <DashboardFrame activeIndex={activeSidebarIndex}>
                     <Panel spec={step.panel} />
                   </DashboardFrame>
                 </div>
@@ -525,7 +337,7 @@ function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step
           </div>
           <div className="hidden lg:block">
             <div className="sticky top-24 py-12">
-              <DashboardFrame active={nav}>
+              <DashboardFrame activeIndex={activeSidebarIndex}>
                 <div key={active} className="animate-[feature-fade_0.45s_ease-out]">
                   <Panel spec={steps[active].panel} />
                 </div>
@@ -546,16 +358,16 @@ function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
-            href="/#cta"
-            className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-500 sm:w-auto"
+            href={localizedHref('/#cta', lang)}
+            className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 sm:w-auto"
           >
-            Start free trial
+            {t.featuresPage.startTrial}
           </a>
           <a
-            href="/pricing"
+            href={localizedHref('/pricing', lang)}
             className="text-sm font-semibold text-blue-600 transition hover:text-blue-500"
           >
-            See pricing →
+            {t.featuresPage.seePricingArrow}
           </a>
         </div>
       </div>
@@ -565,35 +377,39 @@ function FeatureStory({ feature, steps, index }: { feature: Feature; steps: Step
 
 // ── Page: all features, one scroll story after another ──────────────────────
 const FeaturesPage = () => {
+  const { t, lang } = useLanguage()
+  const fp = t.featuresPage
+  const stories = fp.stories as unknown as Record<string, Step[]>
+
   return (
     <div className="pt-16">
       <section className="bg-linear-to-b from-blue-50 via-white to-white">
         <div className="mx-auto max-w-3xl px-4 pt-16 pb-8 text-center sm:px-6 lg:px-8">
           <span className="inline-block rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-600">
-            Features
+            {fp.badge}
           </span>
           <h1 className="mt-6 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
-            Everything your operation needs
+            {fp.title}
           </h1>
           <p className="mt-4 text-lg text-gray-600">
-            Six features, one dashboard. Scroll to see each one exactly as your team will.
+            {fp.subtitle}
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
-              href="/#cta"
-              className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-500 sm:w-auto"
+              href={localizedHref('/#cta', lang)}
+              className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 sm:w-auto"
             >
-              Start free trial
+              {fp.startTrial}
             </a>
             <a
-              href="/pricing"
+              href={localizedHref('/pricing', lang)}
               className="w-full rounded-lg border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 sm:w-auto"
             >
-              See pricing
+              {fp.seePricing}
             </a>
           </div>
           <p className="mt-8 text-xs font-semibold tracking-widest text-gray-400 uppercase">
-            Scroll to explore ↓
+            {fp.scrollToExplore}
           </p>
         </div>
       </section>
@@ -603,9 +419,8 @@ const FeaturesPage = () => {
           key={feature.slug}
           feature={feature}
           steps={
-            STORIES[feature.slug] ?? [
-              { title: feature.title, text: feature.detail, panel: { kind: 'map' } },
-            ]
+            stories[feature.slug] ??
+            ([{ title: feature.title, text: feature.detail, panel: { kind: 'map' } }] as Step[])
           }
           index={index}
         />
@@ -614,23 +429,23 @@ const FeaturesPage = () => {
       <section className="bg-gray-50">
         <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-            All of it works together, out of the box
+            {fp.closing.title}
           </h2>
           <p className="mt-3 text-gray-600">
-            Every feature feeds the same dashboard — no integrations to glue together.
+            {fp.closing.text}
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
-              href="/#cta"
-              className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-500 sm:w-auto"
+              href={localizedHref('/#cta', lang)}
+              className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 sm:w-auto"
             >
-              Start free trial
+              {fp.startTrial}
             </a>
             <a
-              href="/pricing"
+              href={localizedHref('/pricing', lang)}
               className="w-full rounded-lg border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 sm:w-auto"
             >
-              See pricing
+              {fp.seePricing}
             </a>
           </div>
         </div>

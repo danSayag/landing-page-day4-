@@ -1,46 +1,20 @@
 import { useState } from 'react'
 import { useInView } from '../hooks/useInView'
-
-const faqs = [
-  {
-    question: 'How does the free trial work?',
-    answer:
-      'You get full access to all Pro features for 14 days — no credit card required. At the end of the trial you can pick a plan or continue on the free Starter tier.',
-  },
-  {
-    question: 'Can I change plans later?',
-    answer:
-      'Absolutely. You can upgrade, downgrade, or cancel at any time from your billing settings. Changes take effect immediately and we prorate any differences.',
-  },
-  {
-    question: 'Do you offer discounts for startups or nonprofits?',
-    answer:
-      'Yes! Early-stage startups and registered nonprofits get 50% off Pro for the first year. Reach out to our sales team to apply.',
-  },
-  {
-    question: 'Is my data secure?',
-    answer:
-      'Security is our top priority. We are SOC 2 Type II certified, encrypt all data in transit and at rest, and offer SSO and audit logs on Enterprise plans.',
-  },
-  {
-    question: 'Which carriers do you support?',
-    answer:
-      'Nova connects with 100+ carriers worldwide including FedEx, UPS, DHL, and USPS. You can also plug in your own carrier contracts or build custom integrations with our REST API.',
-  },
-]
+import { useLanguage } from '../context/LanguageContext'
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(0)
   const { ref, isVisible } = useInView<HTMLDivElement>()
+  const { t } = useLanguage()
 
   return (
     <section id="faq" className="py-24">
-      <div className="mx-auto max-w-6xl px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,280px)_1fr] lg:gap-16">
           <div className="lg:sticky lg:top-24 lg:self-start rounded-2xl  px-6 py-8 ">
            
             <h2 className="text-3xl font-bold tracking-tight text-black sm:text-4xl">
-              Frequently asked questions
+              {t.faq.sectionTitle}
             </h2>
           </div>
 
@@ -50,7 +24,7 @@ const FAQ = () => {
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
             }`}
           >
-            {faqs.map((faq, index) => {
+            {t.faq.items.map((faq, index) => {
               const isOpen = openIndex === index
               return (
                 <div

@@ -5,6 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>landing-page-3</title>
+    <script>
+      // Set language/direction from the URL prefix (/he/...) before render
+      (function () {
+        var p = location.pathname.replace(/\/+$/, '')
+        if (p === '/he' || p.indexOf('/he/') === 0) {
+          document.documentElement.lang = 'he'
+          document.documentElement.dir = 'rtl'
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
