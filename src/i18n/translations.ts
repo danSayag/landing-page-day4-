@@ -1,4 +1,4 @@
-export type Language = 'en' | 'he'
+export type Language = 'en' | 'he' | 'fr'
 
 export const translations = {
   en: {
@@ -14,7 +14,8 @@ export const translations = {
       skipToMain: 'Skip to main content',
       openMenu: 'Open navigation menu',
       closeMenu: 'Close navigation menu',
-      toggleLang: 'Switch to Hebrew',
+      toggleLang: 'Switch language',
+      language: 'Language',
     },
     hero: {
       badge: 'Built for high-volume shippers',
@@ -143,6 +144,72 @@ export const translations = {
           question: 'Which carriers do you support?',
           answer:
             'Nova connects with 100+ carriers worldwide including FedEx, UPS, DHL, and USPS. You can also plug in your own carrier contracts or build custom integrations with our REST API.',
+        },
+      ],
+    },
+    faqPage: {
+      title: 'Frequently asked questions',
+      subtitle: 'Everything you need to know about Nova. Can’t find an answer? Talk to our team.',
+      items: [
+        {
+          question: 'How does the free trial work?',
+          answer:
+            'You get full access to all Pro features for 14 days — no credit card required. At the end of the trial you can pick a plan or continue on the free Starter tier.',
+        },
+        {
+          question: 'Can I change plans later?',
+          answer:
+            'Absolutely. You can upgrade, downgrade, or cancel at any time from your billing settings. Changes take effect immediately and we prorate any differences.',
+        },
+        {
+          question: 'Do you offer discounts for startups or nonprofits?',
+          answer:
+            'Yes! Early-stage startups and registered nonprofits get 50% off Pro for the first year. Reach out to our sales team to apply.',
+        },
+        {
+          question: 'Is my data secure?',
+          answer:
+            'Security is our top priority. We are SOC 2 Type II certified, encrypt all data in transit and at rest, and offer SSO and audit logs on Enterprise plans.',
+        },
+        {
+          question: 'Which carriers do you support?',
+          answer:
+            'Nova connects with 100+ carriers worldwide including FedEx, UPS, DHL, and USPS. You can also plug in your own carrier contracts or build custom integrations with our REST API.',
+        },
+        {
+          question: 'How long does setup take?',
+          answer:
+            'Most teams are up and running the same day. We handle the configuration for you — carriers, automations, and dashboards — so there is nothing technical for you to set up.',
+        },
+        {
+          question: 'Do you integrate with my existing tools?',
+          answer:
+            'Yes. Nova connects with popular e-commerce platforms, ERPs, and warehouse systems, and our REST API and webhooks let you wire up anything custom.',
+        },
+        {
+          question: 'Can I track shipments across multiple carriers in one place?',
+          answer:
+            'Absolutely. Every shipment from every carrier appears on a single dashboard with real-time status, so your team never juggles separate portals again.',
+        },
+        {
+          question: 'Is there a limit on team members?',
+          answer:
+            'Starter includes one seat, Pro includes up to 20, and Enterprise is unlimited. You can add or remove seats at any time and we prorate the change.',
+        },
+        {
+          question: 'What kind of support do you offer?',
+          answer:
+            'Starter gets community support, Pro gets priority support with fast response times, and Enterprise gets a dedicated success manager and a guaranteed SLA.',
+        },
+        {
+          question: 'Can customers track their own packages?',
+          answer:
+            'Yes. Customers receive automatic SMS and email updates at every step and can follow their package on a live tracking page — which cuts “where is my order?” tickets dramatically.',
+        },
+        {
+          question: 'How do I get started?',
+          answer:
+            'Start your free 14-day trial — no credit card required. Book a short onboarding call and we will have your operation fully set up before the trial ends.',
         },
       ],
     },
@@ -441,7 +508,8 @@ export const translations = {
       skipToMain: 'דלג לתוכן הראשי',
       openMenu: 'פתח תפריט ניווט',
       closeMenu: 'סגור תפריט ניווט',
-      toggleLang: 'Switch to English',
+      toggleLang: 'החלף שפה',
+      language: 'שפה',
     },
     hero: {
       badge: 'בנוי לשולחי חבילות בנפח גבוה',
@@ -569,6 +637,72 @@ export const translations = {
           question: 'באילו מובילים אתם תומכים?',
           answer:
             'נובה מתחברת ל-100+ מובילים ברחבי העולם כולל FedEx, UPS, DHL ו-USPS. ניתן גם לחבר את חוזי המוביל שלך או לבנות אינטגרציות מותאמות אישית עם ה-REST API שלנו.',
+        },
+      ],
+    },
+    faqPage: {
+      title: 'שאלות נפוצות',
+      subtitle: 'כל מה שצריך לדעת על נובה. לא מצאתם תשובה? דברו עם הצוות שלנו.',
+      items: [
+        {
+          question: 'איך עובד הניסיון החינמי?',
+          answer:
+            'תקבל גישה מלאה לכל תכונות ה-Pro למשך 14 יום — ללא כרטיס אשראי. בסיום הניסיון תוכל לבחור תוכנית או להמשיך בשכבת Starter החינמית.',
+        },
+        {
+          question: 'האם ניתן לשנות תוכניות מאוחר יותר?',
+          answer:
+            'בהחלט. ניתן לשדרג, לשנמך, או לבטל בכל עת מהגדרות החיוב. שינויים נכנסים לתוקף מיד ואנו מחשבים פרופורציה לכל הפרשים.',
+        },
+        {
+          question: 'האם אתם מציעים הנחות לסטארטאפים או ארגונים ללא מטרת רווח?',
+          answer:
+            'כן! סטארטאפים בשלב מוקדם וארגונים ללא מטרת רווח מקבלים 50% הנחה על Pro לשנה הראשונה. פנו לצוות המכירות שלנו להגשת בקשה.',
+        },
+        {
+          question: 'האם הנתונים שלי מאובטחים?',
+          answer:
+            'אבטחה היא העדיפות העליונה שלנו. אנחנו מוסמכים SOC 2 Type II, מצפינים את כל הנתונים במעבר ובמנוחה, ומציעים SSO ויומני ביקורת בתוכניות Enterprise.',
+        },
+        {
+          question: 'באילו מובילים אתם תומכים?',
+          answer:
+            'נובה מתחברת ל-100+ מובילים ברחבי העולם כולל FedEx, UPS, DHL ו-USPS. ניתן גם לחבר את חוזי המוביל שלך או לבנות אינטגרציות מותאמות אישית עם ה-REST API שלנו.',
+        },
+        {
+          question: 'כמה זמן לוקחת ההקמה?',
+          answer:
+            'רוב הצוותים מתחילים לעבוד עוד באותו יום. אנחנו מבצעים עבורכם את כל ההגדרה — מובילים, אוטומציות ולוחות בקרה — כך שאין שום דבר טכני שאתם צריכים להגדיר.',
+        },
+        {
+          question: 'האם אתם משתלבים עם הכלים הקיימים שלי?',
+          answer:
+            'כן. נובה מתחברת לפלטפורמות מסחר פופולריות, מערכות ERP ומערכות מחסן, וה-REST API וה-webhooks שלנו מאפשרים לחבר כל דבר מותאם אישית.',
+        },
+        {
+          question: 'האם אפשר לעקוב אחר משלוחים ממספר מובילים במקום אחד?',
+          answer:
+            'בהחלט. כל משלוח מכל מוביל מופיע בלוח בקרה אחד עם סטטוס בזמן אמת, כך שהצוות שלכם לא מתלבט יותר בין פורטלים נפרדים.',
+        },
+        {
+          question: 'האם יש הגבלה על מספר חברי הצוות?',
+          answer:
+            'Starter כולל משתמש אחד, Pro כולל עד 20, ו-Enterprise ללא הגבלה. ניתן להוסיף או להסיר משתמשים בכל עת ואנו מחשבים את ההפרש באופן יחסי.',
+        },
+        {
+          question: 'איזה סוג תמיכה אתם מציעים?',
+          answer:
+            'ב-Starter מקבלים תמיכת קהילה, ב-Pro תמיכה מועדפת עם זמני תגובה מהירים, וב-Enterprise מנהל הצלחה ייעודי ו-SLA מובטח.',
+        },
+        {
+          question: 'האם הלקוחות יכולים לעקוב אחר החבילות שלהם בעצמם?',
+          answer:
+            'כן. הלקוחות מקבלים עדכוני SMS ואימייל אוטומטיים בכל שלב ויכולים לעקוב אחר החבילה בעמוד מעקב חי — מה שמפחית משמעותית פניות "איפה ההזמנה שלי?".',
+        },
+        {
+          question: 'איך מתחילים?',
+          answer:
+            'התחילו את הניסיון החינמי של 14 יום — ללא כרטיס אשראי. קבעו שיחת הטמעה קצרה ואנחנו נקים עבורכם את כל המערכת עוד לפני שהניסיון מסתיים.',
         },
       ],
     },
@@ -850,6 +984,500 @@ export const translations = {
         underlineLinks: 'קו תחתון לקישורים',
         stopAnimations: 'עצירת אנימציות',
         reset: 'איפוס הגדרות',
+      },
+    },
+  },
+
+  fr: {
+    dir: 'ltr' as const,
+    lang: 'fr',
+    nav: {
+      home: 'Accueil',
+      features: 'Fonctionnalités',
+      testimonials: 'Témoignages',
+      pricing: 'Tarifs',
+      faq: 'FAQ',
+      getStarted: 'Commencer',
+      skipToMain: 'Passer au contenu principal',
+      openMenu: 'Ouvrir le menu de navigation',
+      closeMenu: 'Fermer le menu de navigation',
+      toggleLang: 'Changer de langue',
+      language: 'Langue',
+    },
+    hero: {
+      badge: 'Conçu pour les expéditeurs à grand volume',
+      headline1: 'Chaque colis. Chaque mise à jour.',
+      headline2: 'Un seul tableau de bord.',
+      description:
+        'Nova aide les grandes entreprises à envoyer courrier et colis plus rapidement. Automatisez les étiquettes, choisissez le meilleur transporteur à chaque fois et suivez chaque envoi en temps réel — car le temps, c’est de l’argent.',
+      ctaPrimary: 'Démarrer l’essai gratuit',
+      ctaSecondary: 'Voir comment ça marche',
+      sources: {
+        Carriers: 'Transporteurs',
+        Stores: 'Boutiques',
+        Warehouses: 'Entrepôts',
+        Marketplaces: 'Marketplaces',
+        Returns: 'Retours',
+      },
+      dashboardName: 'Tableau de bord Nova',
+      dashboardTagline: 'Chaque envoi, une vue organisée',
+      trustedPrefix: 'Approuvé par',
+      trustedCount: '12 000+',
+      trustedSuffix: 'entreprises dans le monde',
+    },
+    trustedBy: {
+      label: 'Avec qui nous travaillons',
+    },
+    howItWorks: {
+      sectionLabel: 'Comment ça marche',
+      sectionTitle: 'Commencer est simple',
+      sectionDescription: 'De notre première conversation à un réel gain de temps — en trois étapes faciles.',
+      steps: [
+        {
+          title: 'Nous discutons',
+          description: 'Nous commençons par un court appel pour comprendre votre flux de travail, votre volume d’expédition et ce qui ralentit exactement votre équipe.',
+        },
+        {
+          title: 'Je le construis pour vous',
+          description: 'Je configure tout pour votre exploitation — transporteurs, automatisations et tableaux de bord — pour que tout fonctionne dès le premier jour, sans rien à paramétrer.',
+        },
+        {
+          title: 'Vous gagnez du temps',
+          description: 'Votre équipe expédie plus vite avec beaucoup moins de travail manuel, et vous récupérez des heures chaque semaine.',
+        },
+      ],
+    },
+    features: {
+      sectionLabel: 'Fonctionnalités',
+      sectionTitle: 'Tout ce dont votre exploitation a besoin',
+      sectionDescription:
+        'Une seule plateforme pour toute votre exploitation d’expédition — de la salle du courrier jusqu’à la porte.',
+      items: {
+        'package-tracking': {
+          title: 'Suivi des colis',
+          description: 'Statut en temps réel pour chaque colis, de la prise en charge à la porte.',
+        },
+        'mail-sorting': {
+          title: 'Tri des colis',
+          description: 'Routage automatique du courrier et des colis vers le bon centre et le bon chauffeur.',
+        },
+        'customer-notifications': {
+          title: 'Notifications clients',
+          description: 'Mises à jour SMS et e-mail automatiques à chaque étape de livraison.',
+        },
+        'staff-management': {
+          title: 'Gestion du personnel',
+          description: 'Attribuez des tournées, suivez les chauffeurs et gérez les horaires au même endroit.',
+        },
+        'delivery-status': {
+          title: 'Statut de livraison',
+          description: 'Tableau de statut de livraison en direct pour toute votre flotte.',
+        },
+        'reports-analytics': {
+          title: 'Rapports et analyses',
+          description: 'Des informations exploitables sur le volume, le coût et la performance des transporteurs.',
+        },
+      },
+    },
+    testimonials: {
+      sectionLabel: 'Témoignages',
+      sectionTitle: 'Adoré par les équipes d’exploitation partout',
+      starsLabel: '5 étoiles sur 5',
+      items: [
+        {
+          quote:
+            'Nova a réduit notre préparation d’expédition de deux jours à deux heures. Le générateur d’étiquettes en masse s’est rentabilisé dès le premier mois.',
+          name: 'Sarah Chen',
+          role: 'Directrice de la logistique, Linear Labs',
+        },
+        {
+          quote:
+            'La meilleure décision opérationnelle de l’année. Nous expédions deux fois plus de colis avec la même équipe, et plus rien ne se perd.',
+          name: 'Marcus Reid',
+          role: 'VP des opérations, Brightflow',
+        },
+        {
+          quote:
+            'Nous avons remplacé trois portails de transporteurs distincts par Nova en un seul après-midi. Chaque colis, chaque mise à jour — un seul tableau de bord.',
+          name: 'Elena Novak',
+          role: 'Responsable de la salle du courrier, Framewise',
+        },
+      ],
+    },
+    faq: {
+      sectionTitle: 'Questions fréquentes',
+      items: [
+        {
+          question: 'Comment fonctionne l’essai gratuit ?',
+          answer:
+            'Vous bénéficiez d’un accès complet à toutes les fonctionnalités Pro pendant 14 jours — sans carte bancaire. À la fin de l’essai, vous pouvez choisir un forfait ou continuer avec l’offre Starter gratuite.',
+        },
+        {
+          question: 'Puis-je changer de forfait plus tard ?',
+          answer:
+            'Absolument. Vous pouvez passer à un forfait supérieur ou inférieur, ou annuler à tout moment depuis vos paramètres de facturation. Les modifications prennent effet immédiatement et nous calculons les différences au prorata.',
+        },
+        {
+          question: 'Offrez-vous des réductions pour les startups ou les associations ?',
+          answer:
+            'Oui ! Les startups en phase de démarrage et les associations enregistrées bénéficient de 50 % de réduction sur Pro la première année. Contactez notre équipe commerciale pour en faire la demande.',
+        },
+        {
+          question: 'Mes données sont-elles sécurisées ?',
+          answer:
+            'La sécurité est notre priorité absolue. Nous sommes certifiés SOC 2 Type II, chiffrons toutes les données en transit et au repos, et proposons le SSO et les journaux d’audit sur les forfaits Enterprise.',
+        },
+        {
+          question: 'Quels transporteurs prenez-vous en charge ?',
+          answer:
+            'Nova se connecte à plus de 100 transporteurs dans le monde, dont FedEx, UPS, DHL et USPS. Vous pouvez aussi intégrer vos propres contrats de transporteur ou créer des intégrations personnalisées avec notre API REST.',
+        },
+      ],
+    },
+    faqPage: {
+      title: 'Questions fréquentes',
+      subtitle: 'Tout ce que vous devez savoir sur Nova. Vous ne trouvez pas de réponse ? Parlez à notre équipe.',
+      items: [
+        {
+          question: 'Comment fonctionne l’essai gratuit ?',
+          answer:
+            'Vous bénéficiez d’un accès complet à toutes les fonctionnalités Pro pendant 14 jours — sans carte bancaire. À la fin de l’essai, vous pouvez choisir un forfait ou continuer avec l’offre Starter gratuite.',
+        },
+        {
+          question: 'Puis-je changer de forfait plus tard ?',
+          answer:
+            'Absolument. Vous pouvez passer à un forfait supérieur ou inférieur, ou annuler à tout moment depuis vos paramètres de facturation. Les modifications prennent effet immédiatement et nous calculons les différences au prorata.',
+        },
+        {
+          question: 'Offrez-vous des réductions pour les startups ou les associations ?',
+          answer:
+            'Oui ! Les startups en phase de démarrage et les associations enregistrées bénéficient de 50 % de réduction sur Pro la première année. Contactez notre équipe commerciale pour en faire la demande.',
+        },
+        {
+          question: 'Mes données sont-elles sécurisées ?',
+          answer:
+            'La sécurité est notre priorité absolue. Nous sommes certifiés SOC 2 Type II, chiffrons toutes les données en transit et au repos, et proposons le SSO et les journaux d’audit sur les forfaits Enterprise.',
+        },
+        {
+          question: 'Quels transporteurs prenez-vous en charge ?',
+          answer:
+            'Nova se connecte à plus de 100 transporteurs dans le monde, dont FedEx, UPS, DHL et USPS. Vous pouvez aussi intégrer vos propres contrats de transporteur ou créer des intégrations personnalisées avec notre API REST.',
+        },
+        {
+          question: 'Combien de temps prend la configuration ?',
+          answer:
+            'La plupart des équipes sont opérationnelles le jour même. Nous nous chargeons de la configuration pour vous — transporteurs, automatisations et tableaux de bord — vous n’avez rien de technique à paramétrer.',
+        },
+        {
+          question: 'Vous intégrez-vous à mes outils existants ?',
+          answer:
+            'Oui. Nova se connecte aux plateformes e-commerce, ERP et systèmes d’entrepôt les plus courants, et notre API REST et nos webhooks vous permettent de brancher tout ce qui est sur mesure.',
+        },
+        {
+          question: 'Puis-je suivre des envois de plusieurs transporteurs au même endroit ?',
+          answer:
+            'Absolument. Chaque envoi de chaque transporteur apparaît sur un seul tableau de bord avec un statut en temps réel, pour que votre équipe ne jongle plus jamais entre des portails distincts.',
+        },
+        {
+          question: 'Y a-t-il une limite au nombre de membres d’équipe ?',
+          answer:
+            'Starter inclut un siège, Pro jusqu’à 20 et Enterprise est illimité. Vous pouvez ajouter ou retirer des sièges à tout moment et nous calculons la différence au prorata.',
+        },
+        {
+          question: 'Quel type de support proposez-vous ?',
+          answer:
+            'Starter bénéficie du support communautaire, Pro d’un support prioritaire avec des temps de réponse rapides, et Enterprise d’un responsable de la réussite dédié et d’un SLA garanti.',
+        },
+        {
+          question: 'Les clients peuvent-ils suivre leurs propres colis ?',
+          answer:
+            'Oui. Les clients reçoivent des mises à jour SMS et e-mail automatiques à chaque étape et peuvent suivre leur colis sur une page de suivi en direct — ce qui réduit fortement les tickets « où est ma commande ? ».',
+        },
+        {
+          question: 'Comment commencer ?',
+          answer:
+            'Démarrez votre essai gratuit de 14 jours — sans carte bancaire. Réservez un court appel d’intégration et nous configurerons entièrement votre exploitation avant la fin de l’essai.',
+        },
+      ],
+    },
+    cta: {
+      title: 'Prêt à expédier plus vite ?',
+      description:
+        'Rejoignez plus de 12 000 entreprises qui expédient déjà avec Nova. Démarrez votre essai gratuit de 14 jours dès aujourd’hui — sans carte bancaire.',
+      primary: 'Démarrer l’essai gratuit',
+      secondary: 'Parler aux ventes',
+    },
+    pricing: {
+      sectionLabel: 'Tarifs',
+      sectionTitle: 'Une tarification simple et transparente',
+      sectionDescription: 'Commencez gratuitement, passez à la vitesse supérieure quand vous êtes prêt. Aucuns frais cachés, annulez à tout moment.',
+      mostPopular: 'Le plus populaire',
+      plans: [
+        {
+          name: 'Starter',
+          price: '0 $',
+          period: '/mois',
+          description: 'Pour les petites équipes qui débutent.',
+          features: [
+            'Jusqu’à 50 envois/mois',
+            '1 membre d’équipe',
+            'Support communautaire',
+            'Suivi de base',
+          ],
+          cta: 'Commencer gratuitement',
+          highlighted: false,
+        },
+        {
+          name: 'Pro',
+          price: '29 $',
+          period: '/mois',
+          description: 'Pour les entreprises en croissance qui expédient à grande échelle.',
+          features: [
+            'Envois illimités',
+            'Jusqu’à 20 membres d’équipe',
+            'Support prioritaire',
+            'Analyses avancées',
+            'Générateur d’automatisations',
+            'Tarifs transporteurs réduits',
+          ],
+          cta: 'Démarrer l’essai gratuit',
+          highlighted: true,
+        },
+        {
+          name: 'Enterprise',
+          price: 'Sur mesure',
+          period: '',
+          description: 'Pour les organisations aux besoins avancés.',
+          features: [
+            'Tout ce qui est dans Pro',
+            'Membres d’équipe illimités',
+            'SSO et journaux d’audit',
+            'Responsable de la réussite dédié',
+            'SLA et contrats sur mesure',
+          ],
+          cta: 'Contacter les ventes',
+          highlighted: false,
+        },
+      ],
+    },
+    footer: {
+      description:
+        'La plateforme qui aide les grandes entreprises à envoyer courrier et colis plus rapidement. Chaque colis. Chaque mise à jour. Un seul tableau de bord.',
+      copyright: `© ${new Date().getFullYear()} Nova Inc. Tous droits réservés.`,
+      columns: [
+        {
+          title: 'Produit',
+          links: ['Fonctionnalités', 'Tarifs', 'Intégrations', 'Journal des modifications', 'Feuille de route'],
+        },
+        {
+          title: 'Entreprise',
+          links: ['À propos', 'Blog', 'Carrières', 'Presse', 'Contact'],
+        },
+        {
+          title: 'Ressources',
+          links: ['Documentation', 'Référence API', 'Communauté', 'Statut', 'Centre d’aide'],
+        },
+        {
+          title: 'Mentions légales',
+          links: ['Confidentialité', 'Conditions', 'Sécurité', 'Cookies'],
+        },
+      ],
+    },
+    pricingTable: {
+      title: 'Comparer les forfaits',
+      subtitle: 'Tout ce que vous obtenez avec chaque niveau, côte à côte.',
+      columns: { features: 'Fonctionnalités', starter: 'Starter', pro: 'Pro', enterprise: 'Enterprise' },
+      sections: [
+        {
+          title: 'Expédition',
+          rows: [
+            { feature: 'Envois mensuels', starter: 'Jusqu’à 50', pro: 'Illimités', enterprise: 'Illimités' },
+            { feature: 'Création d’étiquettes en masse', starter: false, pro: true, enterprise: true },
+            { feature: 'Enlèvements planifiés', starter: true, pro: true, enterprise: true },
+            { feature: 'Sélection automatique du transporteur', starter: false, pro: true, enterprise: true },
+            { feature: 'Tarifs transporteurs réduits', starter: false, pro: true, enterprise: 'Tarifs sur mesure' },
+          ],
+        },
+        {
+          title: 'Suivi et analyses',
+          rows: [
+            { feature: 'Suivi en temps réel', starter: true, pro: true, enterprise: true },
+            { feature: 'Alertes de livraison', starter: false, pro: true, enterprise: true },
+            { feature: 'Analyses avancées', starter: false, pro: true, enterprise: true },
+            { feature: 'Rapports de performance des transporteurs', starter: false, pro: true, enterprise: true },
+          ],
+        },
+        {
+          title: 'Équipe et sécurité',
+          rows: [
+            { feature: 'Membres d’équipe', starter: '1', pro: 'Jusqu’à 20', enterprise: 'Illimités' },
+            { feature: 'Générateur d’automatisations', starter: false, pro: true, enterprise: true },
+            { feature: 'Contrôle d’accès basé sur les rôles', starter: false, pro: true, enterprise: true },
+            { feature: 'SSO et journaux d’audit', starter: false, pro: false, enterprise: true },
+          ],
+        },
+        {
+          title: 'Support',
+          rows: [
+            { feature: 'Niveau de support', starter: 'Communauté', pro: 'Prioritaire', enterprise: 'Responsable dédié' },
+            { feature: 'SLA et contrats sur mesure', starter: false, pro: false, enterprise: true },
+          ],
+        },
+      ],
+    },
+    accessibilityPage: {
+      title: 'Déclaration d’accessibilité',
+      commitment: {
+        heading: 'Notre engagement',
+        body: 'Nova s’engage à rendre son site web accessible aux personnes en situation de handicap, conformément à la réglementation israélienne sur l’égalité des droits des personnes handicapées (adaptations d’accessibilité des services), 2013, et à la norme israélienne IS 5568, fondée sur les WCAG 2.0 niveau AA.',
+      },
+      compliance: {
+        heading: 'État de conformité',
+        body: 'Ce site vise à se conformer aux WCAG 2.0 niveau AA (norme israélienne IS 5568). Les fonctionnalités d’accessibilité suivantes sont mises en œuvre :',
+        items: [
+          'Lien « Passer au contenu principal » (utilisateurs du clavier)',
+          'Repères sémantiques HTML : header, nav, main, footer',
+          'Tous les éléments interactifs sont accessibles au clavier',
+          'Indicateurs de focus visibles sur tous les éléments focusables',
+          'Étiquettes ARIA sur la navigation et les composants interactifs',
+          'aria-current="page" indiquant la page active',
+          'Contraste de couleur suffisant (minimum 4,5:1 pour le texte normal)',
+          'Conception responsive prenant en charge un zoom jusqu’à 200 %',
+          'Toutes les images et icônes incluent un texte alternatif ou sont marquées comme décoratives',
+        ],
+      },
+      known: {
+        heading: 'Limitations connues',
+        body: 'Nous travaillons en permanence à améliorer l’accessibilité. Si vous rencontrez un obstacle non mentionné ici, veuillez nous contacter.',
+      },
+      contact: {
+        heading: 'Contact accessibilité',
+        body: 'Si vous rencontrez un obstacle d’accessibilité sur ce site, ou si vous avez besoin d’un contenu dans un format alternatif, veuillez contacter notre coordinateur d’accessibilité :',
+        nameLabel: 'Nom :',
+        nameValue: 'Coordinateur d’accessibilité de Nova',
+        emailLabel: 'E-mail :',
+        phoneLabel: 'Téléphone :',
+        responseNote: 'Nous nous efforçons de répondre aux demandes d’accessibilité dans un délai de 2 jours ouvrés.',
+      },
+      date: {
+        heading: 'Date de la déclaration',
+        reviewedOn: 'Cette déclaration d’accessibilité a été révisée pour la dernière fois le',
+        value: '8 juillet 2026',
+      },
+    },
+    featuresPage: {
+      badge: 'Fonctionnalités',
+      title: 'Tout ce dont votre exploitation a besoin',
+      subtitle: 'Six fonctionnalités, un seul tableau de bord. Faites défiler pour voir chacune exactement comme votre équipe la verra.',
+      startTrial: 'Démarrer l’essai gratuit',
+      seePricing: 'Voir les tarifs',
+      seePricingArrow: 'Voir les tarifs →',
+      scrollToExplore: 'Faites défiler pour explorer ↓',
+      dashboardName: 'Tableau de bord Nova',
+      sidebar: ['Aperçu', 'Suivi', 'Tri', 'Notifications', 'Personnel', 'Livraisons', 'Rapports'],
+      barsBadge: '+24 % cette semaine',
+      closing: {
+        title: 'Tout fonctionne ensemble, dès le départ',
+        text: 'Chaque fonctionnalité alimente le même tableau de bord — aucune intégration à assembler.',
+      },
+      stories: {
+        'package-tracking': [
+          { title: 'Chaque colis sur une carte en direct', text: 'L’onglet Suivi affiche toutes les tournées actives en temps réel. Regardez chaque chauffeur se déplacer dans la ville et repérez les problèmes avant qu’ils n’atteignent le client.', panel: { kind: 'map' } },
+          { title: 'Statut en direct pour chaque colis', text: 'Chaque envoi se met à jour à la seconde où il change — pris en charge, au centre, en cours de livraison. Aucun appel aux chauffeurs, aucune supposition.', panel: { kind: 'table', rows: [
+            { main: 'PKG-3821', sub: 'New York → Boston', badge: 'En transit', tone: 'blue' },
+            { main: 'PKG-5504', sub: 'Chicago → Detroit', badge: 'En cours de livraison', tone: 'green' },
+            { main: 'PKG-0193', sub: 'Austin → Dallas', badge: 'Au centre', tone: 'amber' },
+          ] } },
+          { title: 'Vos chiffres, toujours à jour', text: 'Les tuiles d’aperçu se mettent à jour d’elles-mêmes à mesure que les colis se déplacent, pour que votre matinée commence avec de vraies données plutôt qu’avec l’export d’hier.', panel: { kind: 'stats', items: [
+            { value: '1 248', label: 'En transit' },
+            { value: '98,6 %', label: 'À l’heure' },
+            { value: '312', label: 'Livrés aujourd’hui' },
+          ] } },
+        ],
+        'mail-sorting': [
+          { title: 'Tout le courrier entrant dans une seule file', text: 'Chaque lettre et colis qui entre au dépôt est scanné une fois et atterrit dans une file unique sur le tableau de bord.', panel: { kind: 'bubbles', items: [
+            { title: 'Facture #4421', sub: 'Sarah M. · Zone Nord', accent: true },
+            { title: 'Lettre recommandée', sub: 'USPS · Zone Centre' },
+            { title: 'Demande de retour', sub: 'Tom Wren · Zone Docks' },
+          ] } },
+          { title: 'Routage automatique vers le bon centre', text: 'Les règles de tri envoient automatiquement chaque article dans la bonne voie — par code postal, tournée ou niveau de service. Vous suivez chaque voie en direct.', panel: { kind: 'sort' } },
+          { title: 'Rien ne se perd', text: 'Les erreurs de routage apparaissent immédiatement sur le tableau, elles sont donc corrigées au dépôt — et non à la porte d’un client mécontent.', panel: { kind: 'stats', items: [
+            { value: '2 431', label: 'Triés aujourd’hui' },
+            { value: '3', label: 'Centres synchronisés' },
+            { value: '0', label: 'Égarés' },
+          ] } },
+        ],
+        'customer-notifications': [
+          { title: 'Mises à jour SMS et e-mail automatiques', text: 'Rédigez vos modèles de message une seule fois. Ensuite, chaque changement de statut envoie le bon message au bon client — automatiquement.', panel: { kind: 'bubbles', items: [
+            { title: 'Votre colis est en cours de livraison', sub: 'SMS · +1 555-0142', accent: true },
+            { title: 'Livré — photo jointe', sub: 'E-mail · anna@example.com' },
+            { title: 'Enlèvement prévu à 9h00', sub: 'SMS · +1 555-0198' },
+          ] } },
+          { title: 'Déclenchées par de vrais événements de livraison', text: 'Les notifications se déclenchent exactement quand le colis bouge — pas selon une minuterie. Les clients voient la même réalité que vos répartiteurs.', panel: { kind: 'timeline', done: 2, labels: ['Pris en charge', 'En transit', 'Livré'] } },
+          { title: 'Moins d’appels « où est mon colis ? »', text: 'Quand les clients savent déjà, ils arrêtent d’appeler. Votre équipe récupère sa journée.', panel: { kind: 'stats', items: [
+            { value: '-62 %', label: 'Appels au support' },
+            { value: '4,9★', label: 'Note de livraison' },
+            { value: '100 %', label: 'Clients informés' },
+          ] } },
+        ],
+        'staff-management': [
+          { title: 'Toute votre équipe en une seule vue', text: 'Chauffeurs, trieurs et répartiteurs — qui est en poste, ce qu’ils transportent et où ils se trouvent en ce moment.', panel: { kind: 'roster', rows: [
+            { name: 'James R.', role: 'Camionnette · #V-14', pct: 100 },
+            { name: 'Maria L.', role: 'Camion · #T-07', pct: 75 },
+            { name: 'Priya S.', role: 'Camion · #T-03', pct: 45 },
+          ] } },
+          { title: 'Attribuez des tournées en quelques secondes', text: 'Glissez une tournée sur un chauffeur et il la reçoit instantanément sur son téléphone — avec les arrêts, les colis et les itinéraires.', panel: { kind: 'table', rows: [
+            { main: 'James R.', sub: 'Tournée 12 · Nord', badge: 'Attribuée', tone: 'green' },
+            { main: 'Maria L.', sub: 'Tournée 4 · Docks', badge: 'Attribuée', tone: 'green' },
+            { main: 'David K.', sub: 'Tournée 9 · Centre', badge: 'En attente', tone: 'amber' },
+          ] } },
+          { title: 'Des horaires planifiés à l’avance', text: 'Les manques de couverture et les doubles réservations sont signalés avant qu’ils ne surviennent, pas découverts à 6h du matin.', panel: { kind: 'stats', items: [
+            { value: '12', label: 'Chauffeurs en poste' },
+            { value: '98 %', label: 'Couverture des tournées' },
+            { value: '0', label: 'Conflits' },
+          ] } },
+        ],
+        'delivery-status': [
+          { title: 'Un tableau en direct de chaque livraison', text: 'Un seul tableau montre chaque livraison progresser dans ses étapes. Vert signifie en mouvement, et tout le reste attire votre attention.', panel: { kind: 'timeline', done: 3, labels: ['Pris en charge', 'En transit', 'Livré'] } },
+          { title: 'Retards signalés avant que les clients ne s’en aperçoivent', text: 'Les exceptions et les retards remontent automatiquement en haut du tableau, pour que la répartition les corrige tant qu’il est encore temps.', panel: { kind: 'table', rows: [
+            { main: 'PKG-7741', sub: 'Seattle → Portland', badge: 'À l’heure', tone: 'green' },
+            { main: 'PKG-2290', sub: 'Miami → Orlando', badge: 'Retard 20 min', tone: 'rose' },
+            { main: 'PKG-5504', sub: 'Chicago → Detroit', badge: 'Exception', tone: 'amber' },
+          ] } },
+          { title: 'Preuve de livraison, jointe', text: 'Signatures et photos sont enregistrées avec chaque livraison, pour que les litiges se terminent par un lien plutôt que par une chaîne d’appels.', panel: { kind: 'stats', items: [
+            { value: '312', label: 'Livrés aujourd’hui' },
+            { value: '307', label: 'Signatures' },
+            { value: '5', label: 'Preuve photo' },
+          ] } },
+        ],
+        'reports-analytics': [
+          { title: 'Votre semaine en un coup d’œil', text: 'Volume, taux de ponctualité et performance de l’équipe — représentés en direct dans l’onglet Rapports, sans tableur.', panel: { kind: 'bars' } },
+          { title: 'Repérez les tendances avant qu’elles ne vous coûtent', text: 'Les variations d’une semaine à l’autre sont calculées pour vous. Quand une tournée ralentit ou que les coûts grimpent, vous le voyez en premier.', panel: { kind: 'table', rows: [
+            { main: 'Taux de ponctualité', sub: 'vs semaine dernière', badge: '+1,2 %', tone: 'green' },
+            { main: 'Délai de livraison moyen', sub: 'vs semaine dernière', badge: '-4 min', tone: 'green' },
+            { main: 'Coût par colis', sub: 'vs semaine dernière', badge: '-0,11 $', tone: 'green' },
+          ] } },
+          { title: 'Un résumé dans votre boîte mail chaque lundi', text: 'Les chiffres qui comptent, résumés et livrés — avant votre premier café.', panel: { kind: 'bubbles', items: [
+            { title: 'Résumé hebdomadaire', sub: '8 240 colis livrés', accent: true },
+            { title: 'Tournée principale', sub: 'Nord · 1 204 arrêts' },
+            { title: 'Nécessite attention', sub: '3 tournées en retard deux fois' },
+          ] } },
+        ],
+      },
+    },
+    accessibility: {
+      buttonLabel: 'Déclaration d’accessibilité',
+      widget: {
+        title: 'Paramètres d’accessibilité',
+        open: 'Ouvrir les paramètres d’accessibilité',
+        close: 'Fermer les paramètres d’accessibilité',
+        fontSize: 'Taille de police',
+        decrease: 'Diminuer la taille de police',
+        increase: 'Augmenter la taille de police',
+        highContrast: 'Contraste élevé',
+        underlineLinks: 'Souligner les liens',
+        stopAnimations: 'Arrêter les animations',
+        reset: 'Réinitialiser les paramètres',
       },
     },
   },

@@ -29,7 +29,7 @@ const HowItWorks = () => {
         >
           {/* connector line (desktop) */}
           <div
-            className="absolute inset-x-0 top-7 hidden h-px bg-linear-to-r from-transparent via-blue-200 to-transparent md:block"
+            className="hc-line absolute inset-x-0 top-7 hidden h-px bg-linear-to-r from-transparent via-blue-200 to-transparent md:block"
             aria-hidden="true"
           />
 

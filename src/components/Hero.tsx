@@ -71,7 +71,7 @@ const Hero = () => {
               const path = `M ${x} 4 C ${x} 58, 250 42, 250 88`
               return (
                 <g key={source.label}>
-                  <path d={path} fill="none" stroke="#e5e7eb" strokeWidth="1.5" />
+                  <path className="hero-flow-line" d={path} fill="none" stroke="#e5e7eb" strokeWidth="1.5" />
                   <circle r="3.5" fill={source.dot} className="motion-reduce:hidden">
                     <animateMotion
                       dur="2.4s"

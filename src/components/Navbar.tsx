@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import { localizedHref, getLogicalPath } from '../i18n/routing'
+import LanguageSwitcher from './LanguageSwitcher'
 
 const currentLogical = getLogicalPath(
   typeof window !== 'undefined' ? window.location.pathname : '/',
@@ -8,15 +9,14 @@ const currentLogical = getLogicalPath(
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
-  const { lang, setLang, t } = useLanguage()
+  const { lang, t } = useLanguage()
 
   // Nav targets are language-independent ("logical") paths, localized per language.
   const navLinks = [
     { label: t.nav.home, target: '/' },
     { label: t.nav.features, target: '/features' },
-    { label: t.nav.testimonials, target: '/#testimonials' },
     { label: t.nav.pricing, target: '/pricing' },
-    { label: t.nav.faq, target: '/#faq' },
+    { label: t.nav.faq, target: '/faq' },
   ].map((link) => ({
     label: link.label,
     href: localizedHref(link.target, lang),
@@ -60,19 +60,8 @@ const Navbar = () => {
         </ul>
 
         <div className="flex items-center gap-2">
-          {/* Language toggle */}
-          <button
-            type="button"
-            onClick={() => setLang(lang === 'en' ? 'he' : 'en')}
-            aria-label={t.nav.toggleLang}
-            title={t.nav.toggleLang}
-            className="hidden sm:flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 text-gray-400" aria-hidden="true">
-              <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM4.332 8.027a6.012 6.012 0 0 1 1.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 0 1 9 7.5V8a2 2 0 0 0 2 2 2 2 0 0 1 2 2v2.197A5.973 5.973 0 0 1 10 16v-2a2 2 0 0 0-2-2 2 2 0 0 1-2-2 2 2 0 0 0-.668-1.973ZM14 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
-            </svg>
-            {lang === 'en' ? 'HE' : 'EN'}
-          </button>
+          {/* Language switcher */}
+          <LanguageSwitcher className="hidden sm:inline-flex" />
 
           <a
             href={localizedHref('/#cta', lang)}
@@ -123,19 +112,8 @@ const Navbar = () => {
                 </li>
               )
             })}
-            {/* Language toggle in mobile menu */}
-            <li>
-              <button
-                type="button"
-                onClick={() => { setLang(lang === 'en' ? 'he' : 'en'); setMenuOpen(false) }}
-                className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-base font-medium text-gray-700 transition hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
-              >
-                <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 text-gray-400" aria-hidden="true">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM4.332 8.027a6.012 6.012 0 0 1 1.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 0 1 9 7.5V8a2 2 0 0 0 2 2 2 2 0 0 1 2 2v2.197A5.973 5.973 0 0 1 10 16v-2a2 2 0 0 0-2-2 2 2 0 0 1-2-2 2 2 0 0 0-.668-1.973ZM14 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
-                </svg>
-                {t.nav.toggleLang}
-              </button>
-            </li>
+            {/* Language switcher in mobile menu */}
+            
           </ul>
         </div>
       )}

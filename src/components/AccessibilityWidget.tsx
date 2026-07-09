@@ -179,7 +179,33 @@ const AccessibilityWidget = () => {
     <>
       {/* Global accessibility CSS */}
       <style>{`
-        html.a11y-high-contrast { filter: contrast(1.5) saturate(0); }
+        /* High contrast: force strong dark-on-light text and solid borders.
+           A plain contrast() filter only pushes the site's many light-gray
+           elements toward white (invisible), so we override colors directly. */
+        html.a11y-high-contrast body { background-color: #fff; color: #000; }
+        html.a11y-high-contrast .text-gray-300,
+        html.a11y-high-contrast .text-gray-400,
+        html.a11y-high-contrast .text-gray-500,
+        html.a11y-high-contrast .text-gray-600,
+        html.a11y-high-contrast .text-gray-700,
+        html.a11y-high-contrast .text-gray-800,
+        html.a11y-high-contrast .text-gray-900 { color: #000 !important; }
+        /* Brand blue that still passes AA on white. */
+        html.a11y-high-contrast .text-blue-400,
+        html.a11y-high-contrast .text-blue-500,
+        html.a11y-high-contrast .text-blue-600 { color: #1d4ed8 !important; }
+        /* Thin gray/blue hairline borders → solid black so cards are visible. */
+        html.a11y-high-contrast [class*="border-gray-"],
+        html.a11y-high-contrast [class*="border-blue-1"],
+        html.a11y-high-contrast [class*="border-blue-2"] { border-color: #000 !important; }
+        /* Decorative SVG connector/grid strokes (light gray & light blue) → black. */
+        html.a11y-high-contrast .hero-flow-line,
+        html.a11y-high-contrast svg [stroke="#e5e7eb"],
+        html.a11y-high-contrast svg [stroke="#cbd5e1"],
+        html.a11y-high-contrast svg [stroke="#e2e8f0"],
+        html.a11y-high-contrast svg [stroke="#bfdbfe"] { stroke: #000 !important; }
+        /* Connector / track lines drawn as elements (gradients, bg bars) → black. */
+        html.a11y-high-contrast .hc-line { background: #000 !important; }
         html.a11y-underline-links a { text-decoration: underline !important; }
         html.a11y-stop-animations *, html.a11y-stop-animations *::before, html.a11y-stop-animations *::after {
           animation: none !important;

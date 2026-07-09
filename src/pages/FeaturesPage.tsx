@@ -85,7 +85,7 @@ function TimelinePanel({ done, labels }: { done: number; labels: string[] }) {
   return (
     <div className="px-2 py-6">
       <div className="relative flex items-center justify-between">
-        <div className="absolute inset-x-2 top-1/2 h-1 -translate-y-1/2 rounded bg-gray-200" />
+        <div className="hc-line absolute inset-x-2 top-1/2 h-1 -translate-y-1/2 rounded bg-gray-200" />
         <div
           className="absolute top-1/2 left-2 h-1 -translate-y-1/2 rounded bg-blue-600 transition-all duration-700"
           style={{ width: `${(Math.max(done - 1, 0) / (labels.length - 1)) * 100}%` }}
@@ -124,7 +124,7 @@ function RosterPanel({ rows }: { rows: { name: string; role: string; pct: number
             <p className="text-xs font-semibold text-gray-800">{row.name}</p>
             <p className="text-[11px] text-gray-400">{row.role}</p>
           </div>
-          <div className="h-1.5 w-20 overflow-hidden rounded-full bg-gray-200">
+          <div className="hc-line h-1.5 w-20 overflow-hidden rounded-full bg-gray-200">
             <div className="h-full rounded-full bg-blue-600" style={{ width: `${row.pct}%` }} />
           </div>
           <span className="w-9 text-end text-[10px] font-semibold text-gray-500">{row.pct}%</span>
